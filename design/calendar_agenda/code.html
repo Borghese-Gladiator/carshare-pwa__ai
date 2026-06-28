@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reservations - CarShare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2a1700",
+                    "primary": "#0050cb",
+                    "surface-container-low": "#eff4ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-fixed": "#002113",
+                    "on-tertiary-container": "#fff7f1",
+                    "on-secondary-container": "#00714d",
+                    "on-primary-fixed-variant": "#003fa4",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#001849",
+                    "secondary-container": "#6cf8bb",
+                    "tertiary": "#7f4f00",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#424656",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface": "#0b1c30",
+                    "primary-fixed": "#dae1ff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#727687",
+                    "tertiary-container": "#a06500",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c2c6d8",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface": "#f8f9ff",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#b3c5ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-primary-container": "#f8f7ff",
+                    "on-background": "#0b1c30",
+                    "surface-tint": "#0054d6",
+                    "on-secondary-fixed-variant": "#005236",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#006c49",
+                    "primary-container": "#0066ff",
+                    "inverse-surface": "#213145"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "lg": "24px",
+                    "gutter": "16px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "64px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .shadow-soft {
+            box-shadow: 0px 4px 20px rgba(100, 116, 139, 0.08);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md flex justify-between items-center px-gutter h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="directions_car">directions_car</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Reservations</h1>
+</div>
+<button class="p-2 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<main class="pt-20 px-gutter max-w-2xl mx-auto">
+<!-- Date Selector/Calendar Strip -->
+<section class="mb-lg overflow-x-auto">
+<div class="flex gap-4 pb-2">
+<div class="flex flex-col items-center justify-center min-w-[56px] h-20 bg-primary text-on-primary rounded-2xl shadow-lg">
+<span class="font-label-md text-label-md opacity-80">MON</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold">12</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[56px] h-20 bg-surface-container text-on-surface-variant rounded-2xl">
+<span class="font-label-md text-label-md">TUE</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold">13</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[56px] h-20 bg-surface-container text-on-surface-variant rounded-2xl">
+<span class="font-label-md text-label-md">WED</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold">14</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[56px] h-20 bg-surface-container text-on-surface-variant rounded-2xl">
+<span class="font-label-md text-label-md">THU</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold">15</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[56px] h-20 bg-surface-container text-on-surface-variant rounded-2xl">
+<span class="font-label-md text-label-md">FRI</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold">16</span>
+</div>
+</div>
+</section>
+<!-- Agenda List (Timeline) -->
+<section class="space-y-4">
+<h2 class="font-label-md text-label-md text-outline tracking-widest uppercase px-1">Upcoming Bookings</h2>
+<div class="relative pl-6">
+<!-- Vertical Timeline Line -->
+<div class="absolute left-[7px] top-4 bottom-0 w-0.5 bg-outline-variant"></div>
+<!-- Booking Item 1 -->
+<div class="relative mb-lg">
+<div class="absolute -left-[23px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-background z-10"></div>
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-soft border border-surface-container transition-transform active:scale-[0.98]">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-md text-label-md text-primary">Today, 2:00 PM - 5:00 PM</p>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mt-1">Grocery Run</h3>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md">Confirmed</span>
+</div>
+<div class="flex items-center gap-2 mt-4 pt-4 border-t border-surface-container">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden flex items-center justify-center border-2 border-surface-container">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a friendly young man named Alex with short dark hair, wearing a casual polo shirt, looking into the camera with a warm smile. Soft natural lighting in a modern urban apartment setting, high-end photography style with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB47c4y6H9HQfqUvIKFlxetG0hWzZQwmO8XKXaRlSHhCGDtwbxB7d2F7EUj067Zf3TDkb3ZFXZLhBXaIC8z9a5O6FwbptTJzbx0Zb4JU4NyCVAIzty0ZdsOWefXcEDZLdRWPZE2wKlguPcCW5UhGChnth7uAdYzT4Mrz9c9n8msSpVIRtOZQoWbGYtFY5kDbnuNlZENHqPHmkLyQ-Jxu5Z7mSKSAEFuPoMlKhET2LATl2DOHMmouPZUXhNtjAEZ3Xuvn5jNofS5rYE"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">User: <span class="font-semibold text-on-surface">Alex</span></span>
+</div>
+</div>
+</div>
+<!-- Booking Item 2 -->
+<div class="relative mb-lg">
+<div class="absolute -left-[23px] top-1 w-4 h-4 rounded-full bg-outline-variant border-4 border-background z-10"></div>
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-soft border border-surface-container transition-transform active:scale-[0.98]">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-label-md text-label-md text-primary">Tomorrow, 8:00 AM - 10:00 AM</p>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mt-1">Gym</h3>
+</div>
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded-full font-label-md text-label-md">Your Trip</span>
+</div>
+<div class="flex items-center gap-2 mt-4 pt-4 border-t border-surface-container">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs border-2 border-surface-container">
+                                S
+                            </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">User: <span class="font-semibold text-on-surface">Sam (You)</span></span>
+</div>
+</div>
+</div>
+<!-- Empty State Check -->
+<div class="relative py-xl flex flex-col items-center text-center opacity-60">
+<div class="absolute -left-[23px] top-4 bottom-0 w-0.5 border-l-2 border-dashed border-outline-variant"></div>
+<span class="material-symbols-outlined text-4xl mb-2 text-outline" data-icon="event_busy">event_busy</span>
+<p class="font-body-md text-body-md text-on-surface-variant">No more reservations for this week</p>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-primary text-on-primary rounded-2xl shadow-xl flex items-center justify-center transition-transform active:scale-90 hover:scale-105 z-50 group">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest shadow-[0px_-2px_15px_rgba(0,0,0,0.05)] flex justify-around items-center h-20 pb-safe px-4">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors px-4 py-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary relative after:content-[''] after:absolute after:top-0 after:w-8 after:h-1 after:bg-primary after:rounded-full px-4 py-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_today" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors px-4 py-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="sticky_note_2">sticky_note_2</span>
+<span class="font-label-md text-label-md">Notes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors px-4 py-2 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('touchstart', () => {
+                elem.style.transform = 'scale(0.95)';
+            });
+            elem.addEventListener('touchend', () => {
+                elem.style.transform = 'scale(1)';
+            });
+        });
+
+        // Background subtle parallax effect on cards
+        window.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.shadow-soft');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            cards.forEach(card => {
+                card.style.transform = `translate(${(x - 0.5) * 5}px, ${(y - 0.5) * 5}px)`;
+            });
+        });
+    </script>
+</body></html>

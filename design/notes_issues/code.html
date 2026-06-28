@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CarShare - Notes &amp; Issues</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 32px;
+            height: 4px;
+            background-color: #0050cb;
+            border-radius: 9999px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2a1700",
+                        "primary": "#0050cb",
+                        "surface-container-low": "#eff4ff",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary-container": "#fff7f1",
+                        "on-secondary-container": "#00714d",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001849",
+                        "secondary-container": "#6cf8bb",
+                        "tertiary": "#7f4f00",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "primary-fixed": "#dae1ff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline": "#727687",
+                        "tertiary-container": "#a06500",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c2c6d8",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface": "#f8f9ff",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#b3c5ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#f8f7ff",
+                        "on-background": "#0b1c30",
+                        "surface-tint": "#0054d6",
+                        "on-secondary-fixed-variant": "#005236",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container": "#e5eeff",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#006c49",
+                        "primary-container": "#0066ff",
+                        "inverse-surface": "#213145"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "2xl": "48px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md flex justify-between items-center px-gutter h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-lg-mobile text-headline-lg-mobile">directions_car</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Notes &amp; Issues</h1>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+</header>
+<main class="flex-grow pt-20 pb-28 px-gutter max-w-2xl mx-auto w-full">
+<!-- Add Note Button (Top Action) -->
+<div class="mb-lg">
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl flex items-center justify-center gap-2 font-label-md text-label-md shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+                Add Note
+            </button>
+</div>
+<!-- Feed of Cards -->
+<div class="space-y-md">
+<!-- Note 1 (Urgent) -->
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-[0px_4px_20px_rgba(100,116,139,0.08)] border border-outline-variant/20">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-error text-on-error px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider">Urgent</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">2h ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-lg">Low tire pressure light is on</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center bg-primary-fixed text-primary font-label-md">
+                            A
+                        </div>
+<span class="font-label-md text-label-md text-on-surface">Alex</span>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+                        Reply
+                    </button>
+</div>
+</div>
+<!-- Note 2 (FYI) -->
+<div class="bg-surface-container-lowest rounded-2xl p-md shadow-[0px_4px_20px_rgba(100,116,139,0.08)] border border-outline-variant/20">
+<div class="flex justify-between items-start mb-sm">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider">FYI</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Yesterday</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-lg">Gas is about half full</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center bg-secondary-fixed text-on-secondary-fixed font-label-md">
+                            S
+                        </div>
+<span class="font-label-md text-label-md text-on-surface">Sam</span>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+                        Reply
+                    </button>
+</div>
+</div>
+<!-- Note 3 (Location) -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(100,116,139,0.08)] border border-outline-variant/20">
+<div class="h-32 w-full relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, minimalist overhead 3D map view of a modern urban street corner featuring a sidewalk and a red fire hydrant. The aesthetic is bright and high-contrast, matching a light-mode UI design with soft shadows and a professional, crisp architectural rendering style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcvfaYTSjonk9Bw52D5pWGd41heGX9HI2Xr2jvDND9juR3Z2CLhf2u0N7D6hUf_hix9Blqzy78TLyDmN-U_tSfaSseScjEWbQK2EdHQxSJ9GtKbpXOEW8kKH-VO5duOjGdkWxOb9YehQKBWwY2XE0nJgAoHxsMw8W1yq3fiAMF0Z0T2Hkf9Yn4Fv7xNyHWhST36_9GO_zfq94OFkAeFfkDXzlyiMN5jphxBMkEVc4QpTJKcTlp1nQQRnDvSJJL_dc-Dq5hz9CUhik')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 to-transparent"></div>
+<div class="absolute top-sm left-sm">
+<span class="bg-on-surface text-surface px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            Location
+                        </span>
+</div>
+</div>
+<div class="p-md">
+<p class="font-body-md text-body-md text-on-surface mb-sm">Parked near the hydrant on the corner</p>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">3 days ago</span>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest bg-primary-fixed-dim"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest bg-secondary-fixed-dim"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State / Suggestion -->
+<div class="border-2 border-dashed border-outline-variant rounded-2xl p-lg flex flex-col items-center justify-center text-center opacity-60">
+<span class="material-symbols-outlined text-4xl mb-sm">sticky_note_2</span>
+<p class="font-label-md text-label-md text-on-surface-variant">No more notes to show</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80">Stay safe and share updates!</p>
+</div>
+</div>
+</main>
+<!-- Bottom NavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-2px_15px_rgba(0,0,0,0.05)] flex justify-around items-center h-20 pb-safe px-4">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform duration-150">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Calendar -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform duration-150">calendar_today</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<!-- Notes (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary relative after:content-[''] after:absolute after:top-0 after:w-8 after:h-1 after:bg-primary after:rounded-full group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform duration-150" style="font-variation-settings: 'FILL' 1;">sticky_note_2</span>
+<span class="font-label-md text-label-md">Notes</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform duration-150">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('scale-[0.98]');
+            });
+            card.addEventListener('touchend', () => {
+                card.classList.remove('scale-[0.98]');
+            });
+        });
+    </script>
+</body></html>

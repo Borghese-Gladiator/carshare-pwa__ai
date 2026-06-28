@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>CarShare Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Font: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .safe-pb {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        /* Custom Ambient Shadows from Style Guidance */
+        .shadow-card {
+            box-shadow: 0px 4px 20px rgba(100, 116, 139, 0.08);
+        }
+        .shadow-nav {
+            box-shadow: 0px -2px 15px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#2a1700",
+                      "primary": "#0050cb",
+                      "surface-container-low": "#eff4ff",
+                      "background": "#f8f9ff",
+                      "on-secondary-fixed": "#002113",
+                      "on-tertiary-container": "#fff7f1",
+                      "on-secondary-container": "#00714d",
+                      "on-primary-fixed-variant": "#003fa4",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#001849",
+                      "secondary-container": "#6cf8bb",
+                      "tertiary": "#7f4f00",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#424656",
+                      "surface-variant": "#d3e4fe",
+                      "on-surface": "#0b1c30",
+                      "primary-fixed": "#dae1ff",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-highest": "#d3e4fe",
+                      "outline": "#727687",
+                      "tertiary-container": "#a06500",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c2c6d8",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "tertiary-fixed": "#ffddb8",
+                      "surface": "#f8f9ff",
+                      "error": "#ba1a1a",
+                      "inverse-primary": "#b3c5ff",
+                      "secondary-fixed-dim": "#4edea3",
+                      "on-primary-container": "#f8f7ff",
+                      "on-background": "#0b1c30",
+                      "surface-tint": "#0054d6",
+                      "on-secondary-fixed-variant": "#005236",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#6ffbbe",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-container": "#e5eeff",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary": "#006c49",
+                      "primary-container": "#0066ff",
+                      "inverse-surface": "#213145"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "2xl": "48px",
+                      "lg": "24px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md flex justify-between items-center px-gutter h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="directions_car">directions_car</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-inverse-primary">CarShare</h1>
+<div class="w-10 h-10 rounded-full border-2 border-outline-variant flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a professional driver with a friendly smile, clean-shaven, wearing a navy blue polo shirt. The background is a soft-focus urban park in daylight, reflecting a calm and capable atmosphere with bright, natural lighting and high-key tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpVvyUiogweejFPVNvx3ql0NwhC_o1o4iAVFtBZpNZSWbDUylWcklf5q7OgQoATLd3NkvJ00vuxHumgAXPAGKIGBbsA3hVAnRTpM9u0RMJagEpO0tyjipUqbFjwo3-vL-fi5MH3XJ4rpuE8mOi1cibAlJAc4K6gc6_hTLx3u7gI3EJMvkjRk3mEITJc-roHnkXiNNK7CjwMZSmi_y6345wpbnynZz_2ENLwil4nw82gUxq0F40QS7vW6d60yGjc9PfrjRAAbplYH8"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-gutter max-w-lg mx-auto space-y-md">
+<!-- Main Status Card -->
+<section class="relative overflow-hidden rounded-2xl bg-secondary-container p-lg shadow-card border border-on-secondary-container/10">
+<!-- Background Decorative Element -->
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-on-secondary-container/5 rounded-full blur-3xl"></div>
+<div class="flex justify-between items-start mb-xl">
+<div class="space-y-xs">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-fixed font-bold">Car is Available</h2>
+<p class="font-body-md text-body-md text-on-secondary-fixed/80">Nobody is using the car right now.</p>
+</div>
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded-full font-label-md text-label-md">Available</span>
+</div>
+<!-- Car Illustration/Visual -->
+<div class="w-full h-40 relative my-6">
+<img class="w-full h-full object-contain" data-alt="A sleek, modern electric sedan in a clean studio setting. The car is white with subtle blue accents, parked on a polished floor that reflects soft overhead lights. The mood is minimalist, eco-conscious, and technologically advanced, echoing a calm and reliable shared car service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJqGoJVUj3f173OF3gpv8Gs3n1PyNtFKMVA-xFoj-nNPxrZzDgO1_kp0ivinbqZu0MxYn0ok-a0VjAOB0S31o9p71oZ1YrOmf6E7Zun5V7zXbrG-C-FUgoZJ5oCEbBJnyD8cBlBHQ45LKv8aJsyNxvNd91IT5AYJz4sdcYC2UotcA-WGgFf5KZ67MGYS2X6wsEJZH2c8SS2e9ueJPEhFSiroYxynZsv_wozPpZYj1mmLp0zkMHaL0Qpj--xjSSj9DgjeBKEFHTWXg"/>
+</div>
+<button class="w-full bg-primary text-on-primary h-[56px] rounded-xl font-headline-lg-mobile text-headline-lg-mobile font-bold shadow-lg shadow-primary/20 hover:scale-[0.98] transition-transform active:scale-95">
+                Reserve Car
+            </button>
+</section>
+<!-- Bento Layout for Secondary Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Next Reservation Card -->
+<div class="bg-surface-container-lowest p-md rounded-2xl shadow-card border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex items-center gap-sm mb-md text-on-surface-variant">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Upcoming</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Next Reservation</p>
+<div class="flex items-center gap-xs mt-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Alex</span>
+<span class="text-on-surface-variant">•</span>
+<span class="font-body-md text-body-md text-on-surface">2:00 PM</span>
+</div>
+<p class="font-label-sm text-label-sm text-primary mt-1">Today</p>
+</div>
+</div>
+<!-- Parking Location Card -->
+<div class="bg-surface-container-lowest p-md rounded-2xl shadow-card border border-outline-variant/30">
+<div class="flex items-center gap-sm mb-md text-on-surface-variant">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Location</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Last parked at</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold mb-sm">123 Oak Street</p>
+<!-- Mini Map Section -->
+<div class="w-full h-24 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A minimalist vector map visualization of a suburban street intersection. The design is clean with soft gray roads and pale green blocks for houses. A vibrant blue map pin icon clearly marks a specific house on Oak Street, evoking a sense of precision and ease in finding the vehicle." data-location="Seattle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnXsaWT3_LxLcbw0Hc7Ugqc0-Lmu8ibazwoO3E4JdX0--85gy1kDQD_CReccSS_TaaqUW1uZ6h1-RYxTEil6TZhWyCVyhkrkGQ6pzSu3jcoEKb1IRm4KNrXfZlEOwIJH9TaBS2ptU6xl1GBhl1Lk7U3ApVNmn4csfLAFL6eNthnPrMlI-FqMf1ygIVkeK38FKz0F5Sd_qYJkq3t_W92Qn_ka7uBHPCcWdZjLOu7TW69v1g4_pPmVnLUrAIsgiJPoEcmf4Vi7-ba34"/>
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+</div>
+</div>
+</div>
+<!-- Shared With Section -->
+<section class="bg-surface-container-lowest p-md rounded-2xl shadow-card border border-outline-variant/30">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-md">Shared with</h3>
+<div class="flex gap-md overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex flex-col items-center gap-xs flex-shrink-0">
+<div class="w-12 h-12 rounded-full border-2 border-primary ring-2 ring-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a woman with curly hair and glasses, smiling warmly. She is wearing a yellow sweater. The background is a brightly lit modern office with soft, diffused light, reinforcing the community and trust aspect of the car-sharing app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzAi-GVkV5dfNYq_DDCmevfQCmoTslV5y1TmLExZakOlbDRePCcfCElhntL9RaVLzrbiaCaVtN-lTqOgtwTK8opF1OsORBIfwdiNmo_04CVrZK6JyHpALz_iyg1-uLT-k48Lfv-Ya4wRNzGORWDfraynDic_UgZZSQRKQi6AVTMSpupNXlKhdRyw_D2BOfiuVBpgCS48GW3EXyHpJuaXs83QMFesiFc6ORt5F-ZPIT1X4j97CtOTlS7LsPBVYTC5E8sm2ceuHdDjo"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Sarah</span>
+</div>
+<div class="flex flex-col items-center gap-xs flex-shrink-0">
+<div class="w-12 h-12 rounded-full border-2 border-outline-variant overflow-hidden opacity-60">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a man with a short beard and a beanie, looking thoughtful. He is in a brightly lit kitchen setting. The lighting is natural and high-key, maintaining the clean and friendly aesthetic of the design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByDtuqeBPhzISKruMjifpxz8FPWJCIi4rLJ8ath4RlhrbnhyDdMDtteIk-1rdSWKuibASE1pLtV7sJzqFodjtezQvTE6vH3sjyJ5j_IsOh0RMRDbWMy9w5SdQIrxJlNVAB55jjuhnRzRwpNLtKhZn5WJDE7hSVLE-TPumkO0bpzwqtFGPvNbLmd6fWVZfLFK-Gs9w3QyA4ZXZMjo_Rt0F_4slqsQ-Xp2gpjyHEs92k_95CcopHGhfrZc4xX11xHYGUbmmeIe2rb8g"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Mike</span>
+</div>
+<div class="flex flex-col items-center gap-xs flex-shrink-0">
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Add</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest shadow-[0px_-2px_15px_rgba(0,0,0,0.05)] flex justify-around items-center h-20 pb-safe px-4">
+<!-- Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center text-primary relative after:content-[''] after:absolute after:top-0 after:w-8 after:h-1 after:bg-primary after:rounded-full hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Calendar -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<!-- Notes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="sticky_note_2">sticky_note_2</span>
+<span class="font-label-md text-label-md">Notes</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.classList.add('scale-95');
+            });
+            el.addEventListener('mouseup', () => {
+                el.classList.remove('scale-95');
+            });
+            el.addEventListener('mouseleave', () => {
+                el.classList.remove('scale-95');
+            });
+        });
+    </script>
+</body></html>

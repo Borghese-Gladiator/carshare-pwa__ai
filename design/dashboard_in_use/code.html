@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CarShare Dashboard - In Use</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2a1700",
+                    "primary": "#0050cb",
+                    "surface-container-low": "#eff4ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-fixed": "#002113",
+                    "on-tertiary-container": "#fff7f1",
+                    "on-secondary-container": "#00714d",
+                    "on-primary-fixed-variant": "#003fa4",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#001849",
+                    "secondary-container": "#6cf8bb",
+                    "tertiary": "#7f4f00",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#424656",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface": "#0b1c30",
+                    "primary-fixed": "#dae1ff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline": "#727687",
+                    "tertiary-container": "#a06500",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c2c6d8",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface": "#f8f9ff",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#b3c5ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-primary-container": "#f8f7ff",
+                    "on-background": "#0b1c30",
+                    "surface-tint": "#0054d6",
+                    "on-secondary-fixed-variant": "#005236",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#006c49",
+                    "primary-container": "#0066ff",
+                    "inverse-surface": "#213145"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "2xl": "48px",
+                    "lg": "24px",
+                    "gutter": "16px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "64px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .card-shadow {
+        box-shadow: 0px 4px 20px rgba(100, 116, 139, 0.08);
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md flex justify-between items-center px-gutter h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="directions_car">directions_car</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">CarShare</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean professional headshot of a user for a digital profile, set against a soft neutral studio background with gentle lighting that emphasizes a friendly and trustworthy expression. The style is modern and minimalist to match a high-end car sharing app's aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_0MyOPeMb4PMc-AEuZGjX6QhQVqp-qYtFdkeIGmgcHR4c5qU2ecKM-VbJUJRdBXvzgeWNF0zgsCJNaYamsy-97yRTuWpQ7VOkY3MaithYzKxyYLxKM6rDXViz6HxZBxAUi-LozzsOzTqpWhgqzcU5NMWcLqYexOQneJYU4-cSTFv4nPZfXBBSd2xqcRpzci_5_eZjmccIFjVk75c4S7Y25H5xwXnwHTlqeLTT1puA0PXcNi-d79d1lwNMJv8rEIUxhtXxa2rfbCg"/>
+</div>
+</div>
+</header>
+<main class="pt-20 px-gutter max-w-lg mx-auto md:max-w-4xl">
+<!-- Main Status Card: Bento Style -->
+<section class="mt-4">
+<div class="bg-surface-container-low rounded-2xl p-lg card-shadow border border-white/50 relative overflow-hidden">
+<!-- Decorative element -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="flex justify-between items-start mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-14 h-14 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A warm, approachable portrait of a man named Alex, wearing casual smart clothing, looking at the camera with a friendly smile. The lighting is bright and natural, suggesting an outdoor or sunlit indoor setting. The composition is a close-up centered shot suitable for a peer-to-peer car sharing application profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmHuZ-MRKizJxdpo8Swiy7zh3iI6_YTjc_1gYEAu6ax46AHFecbw3XAxPl8Bco-2Z8LvXK5t-p-vPoZ3rDEzoL3C9OIbHH7wYm0ZQlmltz3DKVvM_C5Zotjhqdxq07TsElP3gBCzbyr1MTgOmCQz2sg13GjzqcF2naRiyelqjOUmp0xhzH0R0wTFgy07qrFk2B9LBXi1W07DNfeoFYL-9WGK1DHedhcNJGdbgmbPoOTYaPWWGQdCWxsmwg6pc4HwVrDIHRU1xkAMo"/>
+</div>
+<div>
+<span class="inline-block px-3 py-1 bg-tertiary text-on-tertiary-container text-label-md rounded-full mb-1">IN USE</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Alex has the car</h2>
+</div>
+</div>
+<button class="text-primary-container hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-3xl" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="space-y-sm mb-lg">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<p class="text-body-md font-medium">Since 1:45 PM</p>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="event_available">event_available</span>
+<p class="text-body-md">Expected back at <span class="font-bold text-primary">5:00 PM</span></p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-md">
+<button class="flex-1 h-12 bg-primary text-on-primary font-label-md rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-sm Active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="hail">hail</span>
+                        Request Car
+                    </button>
+<button class="flex-1 h-12 bg-slate-100 text-slate-900 font-label-md rounded-xl hover:bg-slate-200 transition-all flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+                        Message Alex
+                    </button>
+</div>
+</div>
+</section>
+<!-- Secondary Information Grid -->
+<section class="mt-lg grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Parking Location Card -->
+<div class="bg-surface-container-lowest p-md rounded-2xl card-shadow border border-slate-50">
+<div class="flex items-center gap-sm mb-md">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="location_on">location_on</span>
+</div>
+<h3 class="font-label-md text-on-surface-variant">PARKING LOCATION</h3>
+</div>
+<div class="relative h-32 rounded-xl overflow-hidden mb-md group cursor-pointer">
+<div class="absolute inset-0 bg-slate-200" data-alt="A stylized minimalist map showing urban streets and a pinpoint icon for a parking location. The map uses a clean, light-mode palette with soft blues and grays, emphasizing a high-end, calm navigation experience for a car sharing mobile application." data-location="123 Oak Street" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAimCpPCQx_v8sOMv51uwWUhov9o13cc08Y06ohaJreolmaceBVi03HXVBY7ofqyCk8g0ELo6Kw47VOCf45872EmALU2sBBDmYZyYIhzP_5o98A2REVlym58_Yq9vf9g60e43JsnhjJp0aMzBPjX9dERAPiy_CHplu4Gz9r6KFU7eK2b74mjx_XTG34xRUM3zYPKQZbIzXx3FI6sGXfAtISrzcucLuZ2FeyCUfROl5QIcrT9VIUN_e2QUzyewbywsQho3403dUtZU')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+<div class="absolute bottom-2 left-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[10px] font-bold text-slate-800">
+                        123 Oak Street
+                    </div>
+</div>
+<p class="text-body-sm text-on-surface-variant">Last seen: <span class="text-on-surface font-medium">123 Oak Street</span></p>
+</div>
+<!-- Add Note / Observation Card -->
+<button class="bg-surface-container-lowest p-md rounded-2xl card-shadow border border-slate-50 flex flex-col justify-between items-start text-left hover:bg-surface-container-low transition-colors group">
+<div>
+<div class="flex items-center gap-sm mb-md">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="sticky_note_2">sticky_note_2</span>
+</div>
+<h3 class="font-label-md text-on-surface-variant">ADD NOTE</h3>
+</div>
+<p class="text-body-sm text-on-surface-variant">See something while walking by? Leave a note for the next driver.</p>
+</div>
+<div class="mt-lg flex items-center gap-xs text-primary font-label-md">
+<span>Create new note</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</button>
+</section>
+<!-- Trip History / Timeline Preview -->
+<section class="mt-lg mb-8">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-lg-mobile text-on-surface">Recent Activity</h3>
+<button class="text-primary text-label-md hover:underline">View All</button>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-md card-shadow border border-slate-50 space-y-lg">
+<!-- Timeline Item 1 (Current) -->
+<div class="flex gap-md">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-secondary ring-4 ring-secondary-container/30"></div>
+<div class="w-0.5 h-full bg-slate-200 mt-1"></div>
+</div>
+<div class="pb-2">
+<p class="text-body-sm font-bold text-on-surface">Trip Started - Alex</p>
+<p class="text-label-sm text-on-surface-variant">Today, 1:45 PM • 123 Oak Street</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="flex gap-md">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-slate-400"></div>
+<div class="w-0.5 h-full bg-slate-200 mt-1"></div>
+</div>
+<div class="pb-2">
+<p class="text-body-sm font-medium text-on-surface-variant">Car Cleaned</p>
+<p class="text-label-sm text-outline">Yesterday, 6:30 PM • Home Driveway</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="flex gap-md">
+<div class="flex flex-col items-center">
+<div class="w-4 h-4 rounded-full bg-slate-400"></div>
+</div>
+<div>
+<p class="text-body-sm font-medium text-on-surface-variant">Previous Trip Ended - Sarah</p>
+<p class="text-label-sm text-outline">Yesterday, 5:12 PM • 123 Oak Street</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest h-20 pb-safe px-4 flex justify-around items-center shadow-[0px_-2px_15px_rgba(0,0,0,0.05)]">
+<!-- Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center text-primary relative after:content-[''] after:absolute after:top-0 after:w-8 after:h-1 after:bg-primary after:rounded-full transition-all duration-150 Active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="dashboard" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Calendar -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-xl px-2 py-1" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<!-- Notes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-xl px-2 py-1" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="sticky_note_2">sticky_note_2</span>
+<span class="font-label-md text-label-md">Notes</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-xl px-2 py-1" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.97)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>
