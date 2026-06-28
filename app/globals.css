@@ -127,6 +127,12 @@
     line-height: 0.875rem;
     font-weight: 500;
   }
+  .text-label-lg {
+    font-size: 0.875rem;   /* 14px */
+    line-height: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
 }
 
 @layer base {

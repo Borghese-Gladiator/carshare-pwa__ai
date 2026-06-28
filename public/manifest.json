@@ -1,0 +1,17 @@
+{
+  "name": "CarShare",
+  "short_name": "CarShare",
+  "description": "Shared car coordination for two people",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "theme_color": "#0050cb",
+  "background_color": "#f8f9ff",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySession, COOKIE_NAME } from '@/lib/auth'
 
-const PUBLIC = new Set(['/login', '/api/auth/login'])
+const PUBLIC = new Set(['/login', '/offline', '/api/auth/login'])
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
   const { pathname } = req.nextUrl
@@ -22,5 +22,5 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest\\.json|sw\\.js|icons/).*)'],
 }

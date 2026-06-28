@@ -71,6 +71,16 @@ function RequestDetails({ req }: { req: RequestRow }) {
   )
 }
 
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-md">
+      {[0, 1].map((i) => (
+        <div key={i} className="h-28 animate-pulse rounded-2xl bg-surface-container" />
+      ))}
+    </div>
+  )
+}
+
 export function InboxClient() {
   const [requests, setRequests] = useState<RequestRow[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
@@ -138,7 +148,7 @@ export function InboxClient() {
       </header>
 
       <main className="mx-auto max-w-lg space-y-lg px-gutter pb-24 pt-20">
-        {loading && <p className="text-body-md text-on-surface-variant">Loading…</p>}
+        {loading && <LoadingSkeleton />}
         {!loading && !currentUserId && (
           <p className="text-body-md text-on-surface-variant">
             Pick who you are first by using the car once.

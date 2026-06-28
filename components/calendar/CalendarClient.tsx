@@ -214,6 +214,19 @@ function AgendaTimeline({
   )
 }
 
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-md">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="relative pl-6">
+          <div className="absolute -left-[23px] top-1 h-4 w-4 rounded-full bg-surface-container" />
+          <div className="h-20 animate-pulse rounded-2xl bg-surface-container" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function CalendarClient() {
   const today = useMemo(() => new Date(), [])
   const weekDays = useMemo(() => getWeekDays(getWeekMonday(today)), [today])
@@ -289,7 +302,7 @@ export function CalendarClient() {
 
         <h2 className="mb-md mt-lg text-headline-lg-mobile text-on-surface">Upcoming Bookings</h2>
 
-        {loading && <p className="text-body-md text-on-surface-variant">Loading…</p>}
+        {loading && <LoadingSkeleton />}
         {!loading && error && (
           <p className="rounded-2xl bg-error-container p-md text-body-md text-on-error-container">
             {error}

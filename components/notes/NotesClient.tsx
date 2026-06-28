@@ -215,14 +215,14 @@ function NoteFooter({ note, onResolve, resolving }: NoteCardProps) {
         <button
           disabled
           aria-label="Reply (coming soon)"
-          className="flex cursor-not-allowed items-center gap-1 text-label-md text-on-surface-variant opacity-40"
+          className="flex cursor-not-allowed items-center gap-1 py-3 -my-3 text-label-md text-on-surface-variant opacity-40"
         >
           <MessageSquare size={14} /> Reply
         </button>
         <button
           onClick={() => onResolve(note.id)}
           disabled={resolving}
-          className="flex items-center gap-1 text-label-md text-on-surface-variant disabled:opacity-40"
+          className="flex items-center gap-1 py-3 -my-3 text-label-md text-on-surface-variant disabled:opacity-40"
         >
           <Check size={14} /> Resolve
         </button>
