@@ -29,6 +29,23 @@ users · cars · reservations · car_notes · handoff_logs
 car_requests   (conflict / borrow-now requests)
 ```
 
+## Database Setup
+
+Prerequisites: a [Neon](https://neon.tech) Postgres database.
+
+1. Copy `.env.local.example` → `.env.local` and fill in your Neon connection string.
+2. Install dependencies: `npm install`
+3. Run migrations (creates all tables):
+   ```bash
+   npm run db:migrate
+   ```
+4. Seed v1 data — one group, two users (Alice + Bob), one car — idempotent/re-runnable:
+   ```bash
+   npm run db:seed
+   ```
+
+Migrations are tracked in a `_migrations` table; re-running `db:migrate` skips already-applied files.
+
 ## Status
 
 Built incrementally via Agent Workbench. See the project task queue.
