@@ -1,5 +1,5 @@
 import { sql, getPool } from './client';
-import type { Car, CarNote, CarRequest, HandoffLog, HandoffType, Reservation, User } from './schema';
+import type { Car, CarNote, CarRequest, HandoffLog, HandoffType, NoteUrgency, Reservation, User } from './schema';
 
 export async function getUsersByGroup(groupId: string): Promise<User[]> {
   return sql`SELECT * FROM users WHERE group_id = ${groupId} ORDER BY name` as unknown as User[];
@@ -270,4 +270,40 @@ export async function insertHandoffLog(data: {
     RETURNING *
   `) as unknown as HandoffLog[];
   return rows[0];
+}
+
+// Returns active (unresolved) notes joined with author name, newest first.
+export async function getActiveNotesWithAuthors(
+  carId: string,
+): Promise<(CarNote & { author_name: string })[]> {
+  return sql`
+    SELECT n.*, u.name AS author_name
+    FROM car_notes n JOIN users u ON n.author_id = u.id
+    WHERE n.car_id = ${carId} AND n.resolved = false
+    ORDER BY n.created_at DESC
+  ` as unknown as (CarNote & { author_name: string })[];
+}
+
+export async function insertCarNote(data: {
+  carId: string;
+  authorId: string;
+  body: string;
+  urgency: NoteUrgency;
+  location?: string;
+}): Promise<CarNote> {
+  const rows = (await sql`
+    INSERT INTO car_notes (car_id, author_id, body, urgency, location)
+    VALUES (${data.carId}, ${data.authorId}, ${data.body}, ${data.urgency}, ${data.location ?? null})
+    RETURNING *
+  `) as unknown as CarNote[];
+  return rows[0];
+}
+
+export async function resolveCarNote(id: string): Promise<boolean> {
+  const rows = (await sql`
+    UPDATE car_notes SET resolved = true
+    WHERE id = ${id} AND resolved = false
+    RETURNING id
+  `) as unknown as { id: string }[];
+  return rows.length > 0;
 }
