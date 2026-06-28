@@ -59,6 +59,7 @@ export interface HandoffLog {
   parking_location: string | null;
   fuel: string | null;
   mileage: number | null;
+  expected_return: Date | null;
   logged_at: Date;
 }
 

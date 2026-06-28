@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE handoff_logs ALTER COLUMN fuel TYPE TEXT USING fuel::text;
+COMMIT;

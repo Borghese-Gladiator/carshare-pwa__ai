@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE handoff_logs ADD COLUMN expected_return TIMESTAMPTZ;
+COMMIT;
