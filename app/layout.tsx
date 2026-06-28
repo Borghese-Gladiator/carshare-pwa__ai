@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { BottomNav } from '@/components/nav/BottomNav'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -19,10 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           content="width=device-width, initial-scale=1.0, viewport-fit=cover"
         />
       </head>
-      <body>
-        <div className="relative min-h-dvh pb-20">{children}</div>
-        <BottomNav />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
