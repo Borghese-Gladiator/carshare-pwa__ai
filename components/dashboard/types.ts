@@ -28,4 +28,5 @@ export interface DashboardPayload {
     location: string | null
   }[]
   urgentNote: CarNote | null
+  pendingIncomingCount: number
 }

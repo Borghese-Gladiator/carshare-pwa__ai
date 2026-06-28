@@ -71,4 +71,9 @@ export interface CarRequest {
   type: RequestType;
   status: RequestStatus;
   created_at: Date;
+  target_user_id: string | null;
+  requester_reservation_id: string | null;
+  linked_reservation_id: string | null;
+  requested_start: Date | null;
+  requested_end: Date | null;
 }

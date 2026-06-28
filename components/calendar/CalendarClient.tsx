@@ -80,7 +80,15 @@ function DayStrip({
   )
 }
 
-function StatusPill({ isMine, hasConflict }: { isMine: boolean; hasConflict: boolean }) {
+function StatusPill({
+  isMine,
+  hasConflict,
+  hasPendingRequest,
+}: {
+  isMine: boolean
+  hasConflict: boolean
+  hasPendingRequest: boolean
+}) {
   return (
     <div className="flex flex-shrink-0 flex-col items-end gap-1">
       {isMine ? (
@@ -95,6 +103,11 @@ function StatusPill({ isMine, hasConflict }: { isMine: boolean; hasConflict: boo
       {hasConflict && (
         <span className="rounded-full bg-error-container px-3 py-1 text-label-md text-on-error-container">
           Conflict
+        </span>
+      )}
+      {hasPendingRequest && (
+        <span className="rounded-full bg-tertiary-container px-3 py-1 text-label-md text-on-tertiary-container">
+          Pending
         </span>
       )}
     </div>
@@ -172,7 +185,11 @@ function AgendaTimeline({
                     </p>
                   )}
                 </div>
-                <StatusPill isMine={isMine} hasConflict={r.has_conflict} />
+                <StatusPill
+                  isMine={isMine}
+                  hasConflict={r.has_conflict}
+                  hasPendingRequest={r.has_pending_request}
+                />
               </div>
               <div className="mt-md flex items-center gap-2 border-t border-surface-container pt-md">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-fixed text-label-md text-on-primary-fixed">

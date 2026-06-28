@@ -4,6 +4,7 @@ import {
   getReservationsForWeek,
   createReservationChecked,
   getUsersByGroup,
+  getPendingRequestIdsByReservation,
   withSerializableRetry,
 } from '@/lib/db/queries'
 import { conflictResponse } from './conflict'
@@ -27,9 +28,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'No car configured' }, { status: 404 })
   }
 
-  const [rows, groupMembers] = await Promise.all([
+  const [rows, groupMembers, pendingResIds] = await Promise.all([
     getReservationsForWeek(car.id, new Date(from), new Date(to)),
     getUsersByGroup(car.group_id),
+    getPendingRequestIdsByReservation(car.id),
   ])
 
   const reservations: CalendarReservation[] = rows.map((r) => {
@@ -52,6 +54,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       purpose: r.purpose,
       status: r.status,
       has_conflict,
+      has_pending_request: pendingResIds.has(r.id),
     }
   })
 

@@ -5,6 +5,7 @@ import { Bell, Calendar, Car, MapPin } from 'lucide-react'
 import { StatusHero } from './StatusHero'
 import { PickupModal } from './PickupModal'
 import { ReturnModal, type ReturnData } from './ReturnModal'
+import { RequestCarModal } from './RequestCarModal'
 import type { DashboardPayload } from './types'
 
 const fmtDateTime = (iso: string) =>
@@ -116,11 +117,15 @@ export function DashboardClient() {
   const [error, setError] = useState<string | null>(null)
   const [showPickup, setShowPickup] = useState(false)
   const [showReturn, setShowReturn] = useState(false)
+  const [showRequestCar, setShowRequestCar] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch('/api/dashboard/status')
+      const userId = localStorage.getItem('carshare_user_id')
+      const res = await fetch(
+        '/api/dashboard/status' + (userId ? `?userId=${userId}` : ''),
+      )
       if (!res.ok) throw new Error('Failed to load dashboard')
       const payload = (await res.json()) as DashboardPayload
       setData(payload)
@@ -208,7 +213,14 @@ export function DashboardClient() {
           <Car className="text-primary" />
           <span className="text-headline-lg-mobile font-bold text-primary">CarShare</span>
         </div>
-        <Bell className="text-on-surface-variant" size={24} />
+        <div className="relative">
+          <Bell className="text-on-surface-variant" size={24} />
+          {data && data.pendingIncomingCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-label-md text-on-error">
+              {data.pendingIncomingCount}
+            </span>
+          )}
+        </div>
       </header>
 
       <main className="mx-auto max-w-lg space-y-md px-gutter pb-8 pt-20">
@@ -228,6 +240,7 @@ export function DashboardClient() {
               submitting={submitting}
               onPickup={() => setShowPickup(true)}
               onReturn={() => setShowReturn(true)}
+              onRequestCar={() => setShowRequestCar(true)}
             />
             <div className="grid grid-cols-2 gap-md">
               <UpcomingCard reservation={data.nextReservation} />
@@ -256,6 +269,15 @@ export function DashboardClient() {
             await handleReturn(rd)
           }}
           onClose={() => setShowReturn(false)}
+        />
+      )}
+      {showRequestCar && (
+        <RequestCarModal
+          onClose={() => setShowRequestCar(false)}
+          onDone={() => {
+            setShowRequestCar(false)
+            void fetchData()
+          }}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db/client'
 import {
   getLatestHandoffWithUser,
@@ -7,13 +7,15 @@ import {
   getUnresolvedUrgentNotes,
   getRecentHandoffsWithUsers,
   getUsersByGroup,
+  getPendingIncomingCount,
 } from '@/lib/db/queries'
 import type { Car } from '@/lib/db/schema'
 
 const SOON_HOURS = 2
 const ACTIVITY_DAYS = 7
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const userId = req.nextUrl.searchParams.get('userId')
   const carRows = (await sql`SELECT * FROM cars LIMIT 1`) as unknown as Car[]
   const car = carRows[0]
   if (!car) {
@@ -27,6 +29,7 @@ export async function GET(): Promise<NextResponse> {
     urgentNotes,
     recentHandoffs,
     groupMembers,
+    pendingIncomingCount,
   ] = await Promise.all([
     getLatestHandoffWithUser(car.id),
     getUpcomingReservationWithUser(car.id, SOON_HOURS),
@@ -34,6 +37,7 @@ export async function GET(): Promise<NextResponse> {
     getUnresolvedUrgentNotes(car.id),
     getRecentHandoffsWithUsers(car.id, ACTIVITY_DAYS),
     getUsersByGroup(car.group_id),
+    userId ? getPendingIncomingCount(userId) : Promise.resolve(0),
   ])
 
   let status: 'available' | 'reserved' | 'in_use' | 'needs_attention'
@@ -80,5 +84,6 @@ export async function GET(): Promise<NextResponse> {
       location: h.type === 'return' ? h.parking_location : null,
     })),
     urgentNote: urgentNotes[0] ?? null,
+    pendingIncomingCount,
   })
 }

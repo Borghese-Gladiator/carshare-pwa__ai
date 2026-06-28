@@ -13,6 +13,7 @@ interface StatusHeroProps {
   submitting: boolean
   onPickup: () => void
   onReturn: () => void
+  onRequestCar: () => void
 }
 
 const fmtDateTime = (iso: string) =>
@@ -35,6 +36,7 @@ export function StatusHero({
   submitting,
   onPickup,
   onReturn,
+  onRequestCar,
 }: StatusHeroProps) {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
@@ -87,7 +89,10 @@ export function StatusHero({
             </button>
           ) : (
             <>
-              <button className="h-14 flex-1 rounded-lg bg-primary text-label-lg text-on-primary">
+              <button
+                onClick={onRequestCar}
+                className="h-14 flex-1 rounded-lg bg-primary text-label-lg text-on-primary"
+              >
                 Request Car
               </button>
               <button className="h-14 flex-1 rounded-lg bg-surface-container text-label-lg text-on-surface">
