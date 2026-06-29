@@ -5,7 +5,7 @@ import { WifiOff } from 'lucide-react'
 export default function OfflinePage() {
   return (
     <main className="flex min-h-dvh items-center justify-center px-gutter">
-      <div className="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-lg text-center shadow-[var(--shadow-card)]">
+      <div className="w-full max-w-[24rem] rounded-2xl bg-surface-container-lowest p-lg text-center shadow-[var(--shadow-card)]">
         <div className="mx-auto mb-md flex h-12 w-12 items-center justify-center rounded-full bg-surface-container">
           <WifiOff size={24} className="text-on-surface-variant" />
         </div>

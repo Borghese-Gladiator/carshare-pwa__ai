@@ -59,7 +59,7 @@ export default function SettingsPage() {
       <header className="fixed top-0 z-40 flex h-16 w-full items-center bg-background/80 px-gutter backdrop-blur-md">
         <h1 className="text-headline-lg-mobile font-bold text-on-surface">Settings</h1>
       </header>
-      <main className="mx-auto max-w-lg space-y-md px-gutter pb-8 pt-20">
+      <main className="mx-auto max-w-[32rem] space-y-md px-gutter pb-8 pt-20">
         {/* Install card */}
         <div className="rounded-2xl bg-surface-container-lowest p-md shadow-[var(--shadow-card)]">
           <div className="mb-md flex items-center gap-3">

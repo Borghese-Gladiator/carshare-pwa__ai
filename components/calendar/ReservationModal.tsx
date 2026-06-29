@@ -188,7 +188,7 @@ export function ReservationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center">
-      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-surface-container-lowest p-lg sm:rounded-2xl">
+      <div className="max-h-[90vh] w-full max-w-[32rem] overflow-y-auto rounded-t-2xl bg-surface-container-lowest p-lg sm:rounded-2xl">
         <div className="flex items-center justify-between">
           <h2 className="text-headline-lg-mobile text-on-surface">
             {editTarget ? 'Edit reservation' : 'New reservation'}

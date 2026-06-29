@@ -297,7 +297,7 @@ export function CalendarClient() {
         <Car className="text-primary" size={24} />
       </header>
 
-      <main className="mx-auto max-w-2xl px-gutter pb-32 pt-20">
+      <main className="mx-auto max-w-[42rem] px-gutter pb-32 pt-20">
         <DayStrip weekDays={weekDays} selectedDay={selectedDay} onSelect={setSelectedDay} />
 
         <h2 className="mb-md mt-lg text-headline-lg-mobile text-on-surface">Upcoming Bookings</h2>

@@ -34,7 +34,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-dvh items-center justify-center px-gutter">
-      <div className="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-lg shadow-[var(--shadow-card)]">
+      <div className="w-full max-w-[24rem] rounded-2xl bg-surface-container-lowest p-lg shadow-[var(--shadow-card)]">
         <h1 className="text-headline-lg-mobile text-on-surface">CarShare</h1>
         <p className="mt-sm text-body-sm text-on-surface-variant">
           Enter the shared access code to continue.

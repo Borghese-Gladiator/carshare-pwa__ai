@@ -223,7 +223,7 @@ export function DashboardClient() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg space-y-md px-gutter pb-8 pt-20">
+      <main className="mx-auto max-w-[32rem] space-y-md px-gutter pb-8 pt-20">
         {loading && <LoadingSkeleton />}
         {!loading && error && (
           <p className="rounded-2xl bg-error-container p-md text-body-md text-on-error-container">

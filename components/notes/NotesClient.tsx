@@ -110,7 +110,7 @@ export function NotesClient() {
       )}
 
       <main
-        className={`mx-auto max-w-lg space-y-md px-gutter pb-8 ${showSearch ? 'pt-32' : 'pt-20'}`}
+        className={`mx-auto max-w-[32rem] space-y-md px-gutter pb-8 ${showSearch ? 'pt-32' : 'pt-20'}`}
       >
         <button
           onClick={() => setShowAddModal(true)}

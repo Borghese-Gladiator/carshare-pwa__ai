@@ -147,7 +147,7 @@ export function InboxClient() {
         <h1 className="text-headline-lg-mobile font-bold text-on-surface">Inbox</h1>
       </header>
 
-      <main className="mx-auto max-w-lg space-y-lg px-gutter pb-24 pt-20">
+      <main className="mx-auto max-w-[32rem] space-y-lg px-gutter pb-24 pt-20">
         {loading && <LoadingSkeleton />}
         {!loading && !currentUserId && (
           <p className="text-body-md text-on-surface-variant">
