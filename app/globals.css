@@ -87,6 +87,31 @@
   }
 }
 
+/* max-w-* container widths.
+   The custom @theme above redefines --spacing-{sm,md,lg,xl,2xl}, which in
+   Tailwind v4 take precedence for max-width — so max-w-sm resolves to
+   --spacing-sm (8px) and crushes cards to a sliver. The generated
+   utilities sort after any @utility/@layer override, so this block wins on
+   cascade order to restore the intended container widths app-wide. */
+.max-w-xs {
+  max-width: 20rem;
+}
+.max-w-sm {
+  max-width: 24rem;
+}
+.max-w-md {
+  max-width: 28rem;
+}
+.max-w-lg {
+  max-width: 32rem;
+}
+.max-w-xl {
+  max-width: 36rem;
+}
+.max-w-2xl {
+  max-width: 42rem;
+}
+
 /* Typography scale as composable layer components */
 @layer components {
   .text-display-lg {
