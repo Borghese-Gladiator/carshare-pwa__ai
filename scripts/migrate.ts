@@ -2,8 +2,10 @@ import { Pool, neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 import fs from 'node:fs';
 import path from 'node:path';
+import { applyNeonLocalConfig } from '../lib/db/neon-local';
 
 neonConfig.webSocketConstructor = ws;
+applyNeonLocalConfig();
 
 async function main(): Promise<void> {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL! });

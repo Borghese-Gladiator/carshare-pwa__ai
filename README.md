@@ -31,20 +31,39 @@ car_requests   (conflict / borrow-now requests)
 
 ## Database Setup
 
-Prerequisites: a [Neon](https://neon.tech) Postgres database.
+One script — `scripts/dev-db.sh` — sets up either backend and runs migrate + seed.
+It also fills in `ACCESS_CODE` / `SESSION_SECRET` in `.env.local` if they are blank.
 
-1. Copy `.env.local.example` → `.env.local` and fill in your Neon connection string.
-2. Install dependencies: `npm install`
-3. Run migrations (creates all tables):
-   ```bash
-   npm run db:migrate
-   ```
-4. Seed v1 data — one group, two users (Alice + Bob), one car — idempotent/re-runnable:
-   ```bash
-   npm run db:seed
-   ```
+```bash
+npm install
+```
 
-Migrations are tracked in a `_migrations` table; re-running `db:migrate` skips already-applied files.
+### Offline (Dockerized Postgres + Neon proxy)
+
+No cloud account needed. Requires Docker running.
+
+```bash
+./scripts/dev-db.sh local        # start DB, migrate, seed
+npm run dev
+./scripts/dev-db.sh local --down # stop DB and drop its volume
+```
+
+This runs local Postgres plus `local-neon-http-proxy` (see `docker-compose.db.yml`)
+so the `@neondatabase/serverless` driver works against localhost. The script sets
+`NEON_LOCAL=1` and a local `DATABASE_URL` in `.env.local`; that flag routes the
+driver to the proxy (`lib/db/neon-local.ts`).
+
+### Neon cloud
+
+```bash
+# Put your Neon string in .env.local first:
+#   DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/db?sslmode=require
+./scripts/dev-db.sh neon
+npm run dev
+```
+
+Migrations are tracked in a `_migrations` table; re-running skips already-applied files.
+The seed (one group, two users Alice + Bob, one car) is idempotent.
 
 ## Status
 

@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: carshare
+      POSTGRES_PASSWORD: carshare
+      POSTGRES_DB: carshare
+    ports:
+      - "5432:5432"
+    volumes:
+      - carshare_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carshare -d carshare"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    environment:
+      PG_CONNECTION_STRING: postgres://carshare:carshare@postgres:5432/carshare
+    ports:
+      - "4444:4444"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  carshare_pgdata:

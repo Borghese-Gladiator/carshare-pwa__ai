@@ -1,7 +1,9 @@
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
+import { applyNeonLocalConfig } from '../lib/db/neon-local';
 
 neonConfig.webSocketConstructor = ws;
+applyNeonLocalConfig();
 
 const G  = '00000000-0000-0000-0000-000000000001';
 const U1 = '00000000-0000-0000-0000-000000000002';

@@ -1,8 +1,15 @@
-import { neon, Pool } from '@neondatabase/serverless';
+import { neon, Pool, neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
+import { applyNeonLocalConfig } from './neon-local';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is not set');
 }
+
+if (process.env.NEON_LOCAL === '1') {
+  neonConfig.webSocketConstructor = ws;
+}
+applyNeonLocalConfig();
 
 export const sql = neon(process.env.DATABASE_URL);
 
