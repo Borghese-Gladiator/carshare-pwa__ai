@@ -24,6 +24,14 @@ function localInputToIso(value: string): string | null {
   return isNaN(d.getTime()) ? null : d.toISOString()
 }
 
+function addMinutesToLocalInput(value: string, minutes: number): string {
+  const d = new Date(value)
+  if (isNaN(d.getTime())) return ''
+  d.setMinutes(d.getMinutes() + minutes)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 function fmtConflictTime(start: string, end: string): string {
   const fmt = (iso: string) =>
     new Date(iso).toLocaleString(undefined, {
@@ -264,7 +272,14 @@ export function ReservationModal({
               <input
                 type="datetime-local"
                 value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value
+                  setStartTime(next)
+                  const minEnd = addMinutesToLocalInput(next, 1)
+                  if (minEnd && endTime && endTime < minEnd) {
+                    setEndTime(minEnd)
+                  }
+                }}
                 className={inputClass}
               />
             </label>
@@ -274,6 +289,7 @@ export function ReservationModal({
               <input
                 type="datetime-local"
                 value={endTime}
+                min={startTime ? addMinutesToLocalInput(startTime, 1) : undefined}
                 onChange={(e) => setEndTime(e.target.value)}
                 className={inputClass}
               />
