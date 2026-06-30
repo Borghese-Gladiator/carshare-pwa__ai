@@ -59,7 +59,7 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
         <button
           type="button"
           onClick={() => setParkingLocation(DEFAULT_PARKING_LOCATION)}
-          className="mt-2 inline-flex items-center gap-1 border-b border-primary text-label-sm text-primary"
+          className="mt-2 inline-flex items-center gap-1 text-label-sm font-normal leading-none text-primary transition-opacity hover:underline active:opacity-60"
         >
           <Home size={14} aria-hidden />
           HOME
