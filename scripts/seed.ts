@@ -15,11 +15,11 @@ async function main(): Promise<void> {
       [GROUP_ID, 'Default Group'],
     );
     await client.query(
-      `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING`,
+      `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name`,
       [JON_ID, 'Jon', GROUP_ID],
     );
     await client.query(
-      `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING`,
+      `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name`,
       [TIMMY_ID, 'Timmy', GROUP_ID],
     );
     await client.query(

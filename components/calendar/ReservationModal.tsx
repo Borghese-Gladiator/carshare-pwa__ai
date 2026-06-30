@@ -154,9 +154,9 @@ export function ReservationModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center">
-      <div className="max-h-[90vh] w-full max-w-[32rem] overflow-y-auto rounded-t-2xl bg-surface-container-lowest p-lg sm:rounded-2xl">
-        <div className="flex items-center justify-between">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 sm:items-center">
+      <div className="flex max-h-[90vh] w-full max-w-[32rem] flex-col rounded-t-2xl bg-surface-container-lowest sm:rounded-2xl">
+        <div className="flex items-center justify-between p-lg pb-md">
           <h2 className="text-headline-lg-mobile text-on-surface">
             {editTarget ? 'Edit reservation' : 'New reservation'}
           </h2>
@@ -165,6 +165,7 @@ export function ReservationModal({
           </button>
         </div>
 
+        <div className="min-h-0 flex-1 overflow-y-auto px-lg pb-md">
         {conflict ? (
           <div className="mt-lg rounded-lg bg-error-container p-md text-on-error-container">
             <p className="text-label-lg">This overlaps an existing booking</p>
@@ -178,22 +179,6 @@ export function ReservationModal({
                 </li>
               ))}
             </ul>
-            <div className="mt-md flex gap-3">
-              <button
-                onClick={handleForce}
-                disabled={submitting}
-                className="h-12 flex-1 rounded-lg bg-error text-label-lg text-on-error disabled:opacity-50"
-              >
-                Proceed anyway
-              </button>
-              <button
-                onClick={() => setConflict(null)}
-                disabled={submitting}
-                className="h-12 flex-1 rounded-lg border border-outline text-label-lg text-on-surface"
-              >
-                Go back
-              </button>
-            </div>
           </div>
         ) : (
           <>
@@ -270,44 +255,68 @@ export function ReservationModal({
                 {error}
               </p>
             )}
-
-            <button
-              onClick={() => void submit(false)}
-              disabled={submitting}
-              className="mt-lg h-14 w-full rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
-            >
-              {editTarget ? 'Save changes' : 'Create reservation'}
-            </button>
-
-            {editTarget &&
-              (confirmingCancel ? (
-                <div className="mt-md flex gap-3">
-                  <button
-                    onClick={() => void handleCancelReservation()}
-                    disabled={submitting}
-                    className="h-12 flex-1 rounded-lg bg-error text-label-lg text-on-error disabled:opacity-50"
-                  >
-                    Yes, cancel it
-                  </button>
-                  <button
-                    onClick={() => setConfirmingCancel(false)}
-                    disabled={submitting}
-                    className="h-12 flex-1 rounded-lg border border-outline text-label-lg text-on-surface"
-                  >
-                    Keep it
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setConfirmingCancel(true)}
-                  disabled={submitting}
-                  className="mt-md h-12 w-full rounded-lg text-label-lg text-error"
-                >
-                  Cancel reservation
-                </button>
-              ))}
           </>
         )}
+        </div>
+
+        <div className="flex-none border-t border-surface-container p-lg pt-md">
+          {conflict ? (
+            <div className="flex gap-3">
+              <button
+                onClick={handleForce}
+                disabled={submitting}
+                className="h-12 flex-1 rounded-lg bg-error text-label-lg text-on-error disabled:opacity-50"
+              >
+                Proceed anyway
+              </button>
+              <button
+                onClick={() => setConflict(null)}
+                disabled={submitting}
+                className="h-12 flex-1 rounded-lg border border-outline text-label-lg text-on-surface"
+              >
+                Go back
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => void submit(false)}
+                disabled={submitting}
+                className="h-14 w-full rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
+              >
+                {editTarget ? 'Save changes' : 'Create reservation'}
+              </button>
+
+              {editTarget &&
+                (confirmingCancel ? (
+                  <div className="mt-md flex gap-3">
+                    <button
+                      onClick={() => void handleCancelReservation()}
+                      disabled={submitting}
+                      className="h-12 flex-1 rounded-lg bg-error text-label-lg text-on-error disabled:opacity-50"
+                    >
+                      Yes, cancel it
+                    </button>
+                    <button
+                      onClick={() => setConfirmingCancel(false)}
+                      disabled={submitting}
+                      className="h-12 flex-1 rounded-lg border border-outline text-label-lg text-on-surface"
+                    >
+                      Keep it
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmingCancel(true)}
+                    disabled={submitting}
+                    className="mt-md h-12 w-full rounded-lg text-label-lg text-error"
+                  >
+                    Cancel reservation
+                  </button>
+                ))}
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
