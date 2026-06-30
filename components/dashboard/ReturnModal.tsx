@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { Home, X } from 'lucide-react'
 
 export interface ReturnData {
   parkingLocation: string
@@ -15,7 +15,7 @@ interface ReturnModalProps {
   onClose: () => void
 }
 
-const DEFAULT_PARKING_LOCATION = 'Home'
+const DEFAULT_PARKING_LOCATION = 'Home - Parking Garage'
 
 export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
   const [parkingLocation, setParkingLocation] = useState('')
@@ -59,9 +59,10 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
         <button
           type="button"
           onClick={() => setParkingLocation(DEFAULT_PARKING_LOCATION)}
-          className="mt-xs rounded-full border border-outline px-md py-xs text-label-sm text-on-surface-variant"
+          className="mt-2 inline-flex items-center gap-1 border-b border-primary text-label-sm text-primary"
         >
-          Home
+          <Home size={14} aria-hidden />
+          HOME
         </button>
 
         <label className="mt-md block text-label-md text-on-surface-variant">
