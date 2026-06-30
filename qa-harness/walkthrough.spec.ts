@@ -200,7 +200,7 @@ test.describe('CarShare Auth Flow', () => {
     expect(page.status()).toBeLessThan(400)
 
     // Try accessing other protected routes
-    const protectedRoutes = ['/calendar', '/notes', '/settings']
+    const protectedRoutes = ['/calendar', '/settings']
     for (const route of protectedRoutes) {
       await page.goto(route)
       await page.waitForLoadState('networkidle')

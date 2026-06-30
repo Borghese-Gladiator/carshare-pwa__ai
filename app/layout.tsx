@@ -35,7 +35,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Script id="sw-register" strategy="afterInteractive">{`
           if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => {});
+            if (${JSON.stringify(process.env.NODE_ENV === 'production')}) {
+              navigator.serviceWorker.register('/sw.js').catch(() => {});
+            } else {
+              navigator.serviceWorker.getRegistrations().then((rs) => {
+                rs.forEach((r) => r.unregister());
+              });
+              if (window.caches) {
+                caches.keys().then((ks) => ks.forEach((k) => caches.delete(k)));
+              }
+            }
           }
         `}</Script>
       </body>

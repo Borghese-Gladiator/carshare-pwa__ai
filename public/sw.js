@@ -10,8 +10,6 @@ const PRECACHE = [
   OFFLINE_URL,
   '/dashboard',
   '/calendar',
-  '/inbox',
-  '/notes',
   '/settings',
 ]
 
@@ -60,9 +58,8 @@ self.addEventListener('fetch', (e) => {
 
   // ── NEVER CACHE: all API routes ──────────────────────────────────────────
   // Explicit exclusions (belt-and-suspenders comment for review):
-  //   /api/dashboard/status, /api/dashboard/pickup, /api/dashboard/return
-  //   /api/reservations, /api/reservations/[id], /api/reservations/conflict
-  //   /api/requests, /api/requests/[id], /api/requests/count
+  //   /api/dashboard/status, /api/dashboard/return
+  //   /api/reservations, /api/reservations/[id]
   //   /api/notes, /api/notes/[id]
   //   /api/auth/login, /api/auth/logout
   // Rationale: these carry live auth-gated data; stale responses cause data

@@ -4,7 +4,6 @@ import type {
   CarNote,
   HandoffLog,
   HandoffType,
-  NoteUrgency,
   Reservation,
   User,
 } from './schema';
@@ -25,16 +24,6 @@ export async function getReservationsByCar(
     return sql`SELECT * FROM reservations WHERE car_id = ${carId} AND status = ${status} ORDER BY start_time` as unknown as Reservation[];
   }
   return sql`SELECT * FROM reservations WHERE car_id = ${carId} ORDER BY start_time` as unknown as Reservation[];
-}
-
-export async function getCarNotesByCar(
-  carId: string,
-  includeResolved = false,
-): Promise<CarNote[]> {
-  if (includeResolved) {
-    return sql`SELECT * FROM car_notes WHERE car_id = ${carId} ORDER BY created_at DESC` as unknown as CarNote[];
-  }
-  return sql`SELECT * FROM car_notes WHERE car_id = ${carId} AND resolved = false ORDER BY created_at DESC` as unknown as CarNote[];
 }
 
 export async function getHandoffLogsByCar(
@@ -275,40 +264,4 @@ export async function insertHandoffLog(data: {
     RETURNING *
   `) as unknown as HandoffLog[];
   return rows[0];
-}
-
-// Returns active (unresolved) notes joined with author name, newest first.
-export async function getActiveNotesWithAuthors(
-  carId: string,
-): Promise<(CarNote & { author_name: string })[]> {
-  return sql`
-    SELECT n.*, u.name AS author_name
-    FROM car_notes n JOIN users u ON n.author_id = u.id
-    WHERE n.car_id = ${carId} AND n.resolved = false
-    ORDER BY n.created_at DESC
-  ` as unknown as (CarNote & { author_name: string })[];
-}
-
-export async function insertCarNote(data: {
-  carId: string;
-  authorId: string;
-  body: string;
-  urgency: NoteUrgency;
-  location?: string;
-}): Promise<CarNote> {
-  const rows = (await sql`
-    INSERT INTO car_notes (car_id, author_id, body, urgency, location)
-    VALUES (${data.carId}, ${data.authorId}, ${data.body}, ${data.urgency}, ${data.location ?? null})
-    RETURNING *
-  `) as unknown as CarNote[];
-  return rows[0];
-}
-
-export async function resolveCarNote(id: string): Promise<boolean> {
-  const rows = (await sql`
-    UPDATE car_notes SET resolved = true
-    WHERE id = ${id} AND resolved = false
-    RETURNING id
-  `) as unknown as { id: string }[];
-  return rows.length > 0;
 }
