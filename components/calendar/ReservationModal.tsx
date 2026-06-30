@@ -57,7 +57,6 @@ export function ReservationModal({
   const [conflict, setConflict] = useState<ConflictInfo[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [confirmingCancel, setConfirmingCancel] = useState(false)
-  const [swapSubmitting, setSwapSubmitting] = useState(false)
 
   useEffect(() => {
     if (editTarget) {
@@ -137,46 +136,6 @@ export function ReservationModal({
     void submit(true)
   }
 
-  const handleRequestSwap = async (conflictId: string) => {
-    if (!selectedUserId) {
-      setError('Select who the reservation is for.')
-      return
-    }
-    const startIso = localInputToIso(startTime)
-    const endIso = localInputToIso(endTime)
-    if (!startIso || !endIso) {
-      setError('Enter a valid start and end time.')
-      return
-    }
-    setError(null)
-    setSwapSubmitting(true)
-    try {
-      // No reservation is created here — the requester's offered window is
-      // carried on the request and only materialized when the holder accepts.
-      const reqRes = await fetch('/api/requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'swap',
-          requesterId: selectedUserId,
-          targetReservationId: conflictId,
-          requestedStart: startIso,
-          requestedEnd: endIso,
-        }),
-      })
-      if (!reqRes.ok) {
-        const data = (await reqRes.json().catch(() => null)) as { error?: string } | null
-        setError(data?.error ?? 'Could not send swap request. Try again.')
-        return
-      }
-      onDone()
-    } catch {
-      setError('Something went wrong.')
-    } finally {
-      setSwapSubmitting(false)
-    }
-  }
-
   const handleCancelReservation = async () => {
     if (!editTarget) return
     setSubmitting(true)
@@ -216,13 +175,6 @@ export function ReservationModal({
                   {c.user_name ? ` · ${c.user_name}` : ''}
                   <br />
                   <span className="text-label-md">{fmtConflictTime(c.start_time, c.end_time)}</span>
-                  <button
-                    onClick={() => void handleRequestSwap(c.id)}
-                    disabled={swapSubmitting}
-                    className="mt-sm h-10 w-full rounded-lg bg-secondary text-label-md text-on-secondary disabled:opacity-50"
-                  >
-                    Request Swap with {c.user_name || 'holder'}
-                  </button>
                 </li>
               ))}
             </ul>

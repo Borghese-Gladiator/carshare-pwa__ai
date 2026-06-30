@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { Car, Clock, CalendarCheck, AlertTriangle } from 'lucide-react'
 import type { DashboardPayload } from './types'
 
@@ -11,9 +9,7 @@ interface StatusHeroProps {
   nextReservation: DashboardPayload['nextReservation']
   urgentNote: DashboardPayload['urgentNote']
   submitting: boolean
-  onPickup: () => void
   onReturn: () => void
-  onRequestCar: () => void
 }
 
 const fmtDateTime = (iso: string) =>
@@ -23,10 +19,17 @@ const fmtDateTime = (iso: string) =>
     minute: '2-digit',
   }).format(new Date(iso))
 
-const fmtTime = (iso: string) =>
-  new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(
-    new Date(iso),
+function ReturnButton({ submitting, onReturn }: { submitting: boolean; onReturn: () => void }) {
+  return (
+    <button
+      onClick={onReturn}
+      disabled={submitting}
+      className="h-14 w-full rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
+    >
+      Return Car
+    </button>
   )
+}
 
 export function StatusHero({
   status,
@@ -34,16 +37,8 @@ export function StatusHero({
   nextReservation,
   urgentNote,
   submitting,
-  onPickup,
   onReturn,
-  onRequestCar,
 }: StatusHeroProps) {
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-
-  useEffect(() => {
-    setCurrentUserId(localStorage.getItem('carshare_user_id'))
-  }, [])
-
   if (status === 'needs_attention') {
     return (
       <section className="rounded-2xl bg-error-container p-lg">
@@ -53,12 +48,14 @@ export function StatusHero({
         <p className="mt-md text-headline-lg-mobile text-on-error-container">
           {urgentNote?.body ?? 'The car needs attention.'}
         </p>
+        <div className="mt-lg">
+          <ReturnButton submitting={submitting} onReturn={onReturn} />
+        </div>
       </section>
     )
   }
 
   if (status === 'in_use' && activeHandoff) {
-    const isHolder = currentUserId === activeHandoff.userId
     return (
       <section className="rounded-2xl bg-surface-container-low p-lg">
         <span className="inline-flex items-center rounded-full bg-tertiary px-3 py-1 text-label-md text-on-tertiary-container">
@@ -78,28 +75,8 @@ export function StatusHero({
             </div>
           )}
         </div>
-        <div className="mt-lg flex gap-3">
-          {isHolder ? (
-            <button
-              onClick={onReturn}
-              disabled={submitting}
-              className="h-14 flex-1 rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
-            >
-              Return Car
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={onRequestCar}
-                className="h-14 flex-1 rounded-lg bg-primary text-label-lg text-on-primary"
-              >
-                Request Car
-              </button>
-              <button className="h-14 flex-1 rounded-lg bg-surface-container text-label-lg text-on-surface">
-                Message
-              </button>
-            </>
-          )}
+        <div className="mt-lg">
+          <ReturnButton submitting={submitting} onReturn={onReturn} />
         </div>
       </section>
     )
@@ -115,17 +92,10 @@ export function StatusHero({
           {nextReservation.userName} reserved the car
         </h2>
         <p className="mt-sm text-body-md text-on-primary-fixed-variant">
-          Starting {fmtDateTime(nextReservation.startTime)} ·{' '}
-          {fmtTime(nextReservation.endTime)}
+          Starting {fmtDateTime(nextReservation.startTime)}
         </p>
         <div className="mt-lg">
-          <button
-            onClick={onPickup}
-            disabled={submitting}
-            className="h-14 w-full rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
-          >
-            Pickup Car
-          </button>
+          <ReturnButton submitting={submitting} onReturn={onReturn} />
         </div>
       </section>
     )
@@ -139,20 +109,8 @@ export function StatusHero({
       </span>
       <Car size={72} className="my-lg text-on-secondary-fixed" />
       <h2 className="text-headline-lg-mobile text-on-secondary-fixed">Car is Available</h2>
-      <div className="mt-lg flex w-full flex-col gap-3">
-        <Link
-          href="/calendar"
-          className="flex h-14 w-full items-center justify-center rounded-lg bg-secondary text-label-lg text-on-secondary"
-        >
-          Reserve Car
-        </Link>
-        <button
-          onClick={onPickup}
-          disabled={submitting}
-          className="h-14 w-full rounded-lg bg-primary text-label-lg text-on-primary disabled:opacity-50"
-        >
-          Pickup Car
-        </button>
+      <div className="mt-lg w-full">
+        <ReturnButton submitting={submitting} onReturn={onReturn} />
       </div>
     </section>
   )

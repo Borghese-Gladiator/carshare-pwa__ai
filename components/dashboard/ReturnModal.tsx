@@ -7,6 +7,7 @@ export interface ReturnData {
   parkingLocation: string
   fuel?: string
   mileage?: string
+  note?: string
 }
 
 interface ReturnModalProps {
@@ -18,6 +19,7 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
   const [parkingLocation, setParkingLocation] = useState('')
   const [fuel, setFuel] = useState('')
   const [mileage, setMileage] = useState('')
+  const [note, setNote] = useState('')
 
   const inputClass =
     'mt-sm w-full rounded-lg border border-outline bg-surface px-md py-sm text-body-md text-on-surface'
@@ -28,6 +30,7 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
       parkingLocation: parkingLocation.trim(),
       fuel: fuel.trim() || undefined,
       mileage: mileage.trim() || undefined,
+      note: note.trim() || undefined,
     })
   }
 
@@ -71,6 +74,17 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
             inputMode="numeric"
             value={mileage}
             onChange={(e) => setMileage(e.target.value)}
+            className={inputClass}
+          />
+        </label>
+
+        <label className="mt-md block text-label-md text-on-surface-variant">
+          Note (optional)
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="e.g. Left it with half a tank, rear tyre looks low"
+            rows={3}
             className={inputClass}
           />
         </label>

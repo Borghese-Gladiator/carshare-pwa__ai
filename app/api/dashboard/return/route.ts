@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db/client'
-import { getUsersByGroup, insertHandoffLog } from '@/lib/db/queries'
+import { insertHandoffLog } from '@/lib/db/queries'
+import { USERS } from '@/lib/users'
 import type { Car } from '@/lib/db/schema'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -11,6 +12,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const fuel: string | undefined = typeof body?.fuel === 'string' ? body.fuel : undefined
   const mileage: number | undefined =
     typeof body?.mileage === 'number' ? body.mileage : undefined
+  const note: string | undefined =
+    typeof body?.note === 'string' && body.note.trim() ? body.note.trim() : undefined
 
   if (!userId) {
     return NextResponse.json({ error: 'userId is required' }, { status: 400 })
@@ -25,8 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'No car configured' }, { status: 404 })
   }
 
-  const members = await getUsersByGroup(car.group_id)
-  if (!members.some((m) => m.id === userId)) {
+  if (!USERS.some((m) => m.id === userId)) {
     return NextResponse.json({ error: 'Unknown user' }, { status: 400 })
   }
 
@@ -37,6 +39,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     parkingLocation,
     fuel,
     mileage,
+    note,
   })
   return NextResponse.json({ ok: true })
 }

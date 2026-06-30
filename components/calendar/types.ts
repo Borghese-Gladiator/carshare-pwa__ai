@@ -11,7 +11,6 @@ export interface CalendarReservation {
   purpose: string | null
   status: string
   has_conflict: boolean
-  has_pending_request: boolean
 }
 
 export interface CalendarPayload {

@@ -3,11 +3,10 @@ import { sql } from '@/lib/db/client'
 import {
   getReservationsForWeek,
   createReservationChecked,
-  getUsersByGroup,
-  getPendingRequestIdsByReservation,
   withSerializableRetry,
 } from '@/lib/db/queries'
 import { conflictResponse } from './conflict'
+import { USERS } from '@/lib/users'
 import type { Car } from '@/lib/db/schema'
 import type { CalendarReservation } from '@/components/calendar/types'
 
@@ -28,11 +27,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'No car configured' }, { status: 404 })
   }
 
-  const [rows, groupMembers, pendingResIds] = await Promise.all([
-    getReservationsForWeek(car.id, new Date(from), new Date(to)),
-    getUsersByGroup(car.group_id),
-    getPendingRequestIdsByReservation(car.id),
-  ])
+  const rows = await getReservationsForWeek(car.id, new Date(from), new Date(to))
 
   const reservations: CalendarReservation[] = rows.map((r) => {
     const start = new Date(r.start_time).toISOString()
@@ -54,11 +49,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       purpose: r.purpose,
       status: r.status,
       has_conflict,
-      has_pending_request: pendingResIds.has(r.id),
     }
   })
 
-  return NextResponse.json({ reservations, groupMembers })
+  return NextResponse.json({ reservations, groupMembers: USERS })
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -92,7 +86,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'No car configured' }, { status: 404 })
   }
 
-  const members = await getUsersByGroup(car.group_id)
+  const members = USERS
   if (!members.some((m) => m.id === userId)) {
     return NextResponse.json({ error: 'User is not part of this group' }, { status: 400 })
   }

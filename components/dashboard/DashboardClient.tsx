@@ -1,11 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Bell, Calendar, Car, MapPin } from 'lucide-react'
+import { Calendar, Car, MapPin } from 'lucide-react'
 import { StatusHero } from './StatusHero'
-import { PickupModal } from './PickupModal'
 import { ReturnModal, type ReturnData } from './ReturnModal'
-import { RequestCarModal } from './RequestCarModal'
+import { UserSwitcher } from './UserSwitcher'
 import type { DashboardPayload } from './types'
 
 const fmtDateTime = (iso: string) =>
@@ -54,12 +53,13 @@ function LocationCard({ location }: { location: string | null }) {
   )
 }
 
-function SharedWithCard({ members }: { members: DashboardPayload['groupMembers'] }) {
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-  useEffect(() => {
-    setCurrentUserId(localStorage.getItem('carshare_user_id'))
-  }, [])
-
+function SharedWithCard({
+  members,
+  currentUserId,
+}: {
+  members: DashboardPayload['groupMembers']
+  currentUserId: string | null
+}) {
   return (
     <div className="rounded-2xl bg-surface-container-low p-md">
       <div className="text-label-md text-on-surface-variant">SHARED WITH</div>
@@ -96,9 +96,12 @@ function RecentActivitySection({ items }: { items: DashboardPayload['recentActiv
               />
               <div className="min-w-0">
                 <p className="text-body-md text-on-surface">
-                  {item.userName} {item.type === 'pickup' ? 'started a trip' : 'ended a trip'}
+                  {item.userName} {item.type === 'pickup' ? 'started a trip' : 'returned the car'}
                   {item.location ? ` · ${item.location}` : ''}
                 </p>
+                {item.note && (
+                  <p className="text-body-md text-on-surface-variant">{item.note}</p>
+                )}
                 <p className="text-label-md text-on-surface-variant">
                   {fmtDateTime(item.loggedAt)}
                 </p>
@@ -115,10 +118,13 @@ export function DashboardClient() {
   const [data, setData] = useState<DashboardPayload | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showPickup, setShowPickup] = useState(false)
   const [showReturn, setShowReturn] = useState(false)
-  const [showRequestCar, setShowRequestCar] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    setCurrentUserId(localStorage.getItem('carshare_user_id'))
+  }, [])
 
   const fetchData = useCallback(async () => {
     try {
@@ -146,39 +152,10 @@ export function DashboardClient() {
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [fetchData])
 
-  const handlePickup = async (userId: string, expectedReturn?: string) => {
-    if (!userId) {
-      setError('Select who is picking up the car.')
-      return
-    }
-    setSubmitting(true)
-    try {
-      const res = await fetch('/api/dashboard/pickup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          expectedReturn: expectedReturn
-            ? new Date(expectedReturn).toISOString()
-            : undefined,
-        }),
-      })
-      if (!res.ok) {
-        setError('Could not record pickup. Please try again.')
-        return
-      }
-      await fetchData()
-    } catch {
-      setError('Could not record pickup. Please try again.')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   const handleReturn = async (rd: ReturnData) => {
     const userId = localStorage.getItem('carshare_user_id')
     if (!userId) {
-      setError('We could not identify you. Pick up the car again before returning it.')
+      setError('Pick who you are (top right) before returning the car.')
       return
     }
     const mileage = rd.mileage ? Math.round(Number(rd.mileage)) : undefined
@@ -192,6 +169,7 @@ export function DashboardClient() {
           parkingLocation: rd.parkingLocation,
           fuel: rd.fuel,
           mileage: Number.isFinite(mileage) ? mileage : undefined,
+          note: rd.note,
         }),
       })
       if (!res.ok) {
@@ -213,14 +191,7 @@ export function DashboardClient() {
           <Car className="text-primary" />
           <span className="text-headline-lg-mobile font-bold text-primary">CarShare</span>
         </div>
-        <div className="relative">
-          <Bell className="text-on-surface-variant" size={24} />
-          {data && data.pendingIncomingCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-label-md text-on-error">
-              {data.pendingIncomingCount}
-            </span>
-          )}
-        </div>
+        <UserSwitcher currentUserId={currentUserId} onChange={setCurrentUserId} />
       </header>
 
       <main className="mx-auto max-w-[32rem] space-y-md px-gutter pb-8 pt-20">
@@ -238,30 +209,18 @@ export function DashboardClient() {
               nextReservation={data.nextReservation}
               urgentNote={data.urgentNote}
               submitting={submitting}
-              onPickup={() => setShowPickup(true)}
               onReturn={() => setShowReturn(true)}
-              onRequestCar={() => setShowRequestCar(true)}
             />
             <div className="grid grid-cols-2 gap-md">
               <UpcomingCard reservation={data.nextReservation} />
               <LocationCard location={data.lastLocation} />
             </div>
-            <SharedWithCard members={data.groupMembers} />
+            <SharedWithCard members={data.groupMembers} currentUserId={currentUserId} />
             <RecentActivitySection items={data.recentActivity} />
           </>
         )}
       </main>
 
-      {showPickup && data && (
-        <PickupModal
-          groupMembers={data.groupMembers}
-          onConfirm={async (uid, er) => {
-            setShowPickup(false)
-            await handlePickup(uid, er)
-          }}
-          onClose={() => setShowPickup(false)}
-        />
-      )}
       {showReturn && (
         <ReturnModal
           onConfirm={async (rd) => {
@@ -269,15 +228,6 @@ export function DashboardClient() {
             await handleReturn(rd)
           }}
           onClose={() => setShowReturn(false)}
-        />
-      )}
-      {showRequestCar && (
-        <RequestCarModal
-          onClose={() => setShowRequestCar(false)}
-          onDone={() => {
-            setShowRequestCar(false)
-            void fetchData()
-          }}
         />
       )}
     </div>

@@ -1,14 +1,10 @@
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
 import { applyNeonLocalConfig } from '../lib/db/neon-local';
+import { GROUP_ID, CAR_ID, JON_ID, TIMMY_ID } from '../lib/users';
 
 neonConfig.webSocketConstructor = ws;
 applyNeonLocalConfig();
-
-const G  = '00000000-0000-0000-0000-000000000001';
-const U1 = '00000000-0000-0000-0000-000000000002';
-const U2 = '00000000-0000-0000-0000-000000000003';
-const C1 = '00000000-0000-0000-0000-000000000004';
 
 async function main(): Promise<void> {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
@@ -16,19 +12,19 @@ async function main(): Promise<void> {
   try {
     await client.query(
       `INSERT INTO groups (id, name) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING`,
-      [G, 'Default Group'],
+      [GROUP_ID, 'Default Group'],
     );
     await client.query(
       `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING`,
-      [U1, 'Alice', G],
+      [JON_ID, 'Jon', GROUP_ID],
     );
     await client.query(
       `INSERT INTO users (id, name, group_id) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING`,
-      [U2, 'Bob', G],
+      [TIMMY_ID, 'Timmy', GROUP_ID],
     );
     await client.query(
       `INSERT INTO cars (id, group_id, name) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING`,
-      [C1, G, 'Shared Car'],
+      [CAR_ID, GROUP_ID, 'Shared Car'],
     );
     console.log('Seed complete.');
   } finally {

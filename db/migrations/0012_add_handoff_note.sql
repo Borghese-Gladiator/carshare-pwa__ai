@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE handoff_logs ADD COLUMN note TEXT;
+COMMIT;

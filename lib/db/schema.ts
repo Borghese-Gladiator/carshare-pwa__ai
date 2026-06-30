@@ -1,8 +1,6 @@
 export type ReservationStatus = 'pending' | 'active' | 'completed' | 'cancelled';
 export type NoteUrgency       = 'urgent' | 'fyi';
 export type HandoffType       = 'pickup' | 'return';
-export type RequestType       = 'borrow_now' | 'swap';
-export type RequestStatus     = 'pending' | 'accepted' | 'declined';
 
 export interface Group {
   id: string;
@@ -60,20 +58,6 @@ export interface HandoffLog {
   fuel: string | null;
   mileage: number | null;
   expected_return: Date | null;
+  note: string | null;
   logged_at: Date;
-}
-
-export interface CarRequest {
-  id: string;
-  car_id: string;
-  requester_id: string;
-  target_reservation_id: string | null;
-  type: RequestType;
-  status: RequestStatus;
-  created_at: Date;
-  target_user_id: string | null;
-  requester_reservation_id: string | null;
-  linked_reservation_id: string | null;
-  requested_start: Date | null;
-  requested_end: Date | null;
 }

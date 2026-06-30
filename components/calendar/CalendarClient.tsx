@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Car, Plus } from 'lucide-react'
+import { Car, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { ReservationModal } from './ReservationModal'
 import type { CalendarPayload, CalendarReservation } from './types'
 
@@ -15,11 +15,23 @@ function getWeekMonday(today: Date): Date {
 }
 
 function getWeekDays(monday: Date): Date[] {
-  return Array.from({ length: 5 }, (_, i) => {
+  return Array.from({ length: 7 }, (_, i) => {
     const d = new Date(monday)
     d.setDate(monday.getDate() + i)
     return d
   })
+}
+
+function addDays(d: Date, days: number): Date {
+  const x = new Date(d)
+  x.setDate(x.getDate() + days)
+  return x
+}
+
+function fmtWeekRange(monday: Date): string {
+  const sunday = addDays(monday, 6)
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }
+  return `${monday.toLocaleDateString(undefined, opts)} – ${sunday.toLocaleDateString(undefined, opts)}`
 }
 
 function isSameDay(a: Date, b: Date): boolean {
@@ -32,7 +44,7 @@ function startOfDay(d: Date): Date {
   return x
 }
 
-const DAY_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI']
+const DAY_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 
 function fmtAgendaTime(start: string, end: string, today: Date): string {
   const s = new Date(start)
@@ -83,11 +95,9 @@ function DayStrip({
 function StatusPill({
   isMine,
   hasConflict,
-  hasPendingRequest,
 }: {
   isMine: boolean
   hasConflict: boolean
-  hasPendingRequest: boolean
 }) {
   return (
     <div className="flex flex-shrink-0 flex-col items-end gap-1">
@@ -103,11 +113,6 @@ function StatusPill({
       {hasConflict && (
         <span className="rounded-full bg-error-container px-3 py-1 text-label-md text-on-error-container">
           Conflict
-        </span>
-      )}
-      {hasPendingRequest && (
-        <span className="rounded-full bg-tertiary-container px-3 py-1 text-label-md text-on-tertiary-container">
-          Pending
         </span>
       )}
     </div>
@@ -185,11 +190,7 @@ function AgendaTimeline({
                     </p>
                   )}
                 </div>
-                <StatusPill
-                  isMine={isMine}
-                  hasConflict={r.has_conflict}
-                  hasPendingRequest={r.has_pending_request}
-                />
+                <StatusPill isMine={isMine} hasConflict={r.has_conflict} />
               </div>
               <div className="mt-md flex items-center gap-2 border-t border-surface-container pt-md">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-fixed text-label-md text-on-primary-fixed">
@@ -229,7 +230,8 @@ function LoadingSkeleton() {
 
 export function CalendarClient() {
   const today = useMemo(() => new Date(), [])
-  const weekDays = useMemo(() => getWeekDays(getWeekMonday(today)), [today])
+  const [weekStart, setWeekStart] = useState<Date>(() => getWeekMonday(today))
+  const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart])
   const [selectedDay, setSelectedDay] = useState<Date>(() => {
     const dow = today.getDay()
     return dow === 0 || dow === 6 ? getWeekMonday(today) : new Date(today)
@@ -245,14 +247,22 @@ export function CalendarClient() {
     setCurrentUserId(localStorage.getItem('carshare_user_id'))
   }, [])
 
+  const goToWeek = (delta: number) => {
+    const nextStart = addDays(weekStart, delta * 7)
+    setWeekStart(nextStart)
+    const isCurrentWeek = isSameDay(nextStart, getWeekMonday(today))
+    setSelectedDay(isCurrentWeek ? new Date(today) : nextStart)
+  }
+
   const fetchData = useCallback(async () => {
+    setLoading(true)
     try {
-      const monday = getWeekMonday(today)
-      const friday = new Date(monday)
-      friday.setDate(monday.getDate() + 4)
-      friday.setHours(23, 59, 59, 999)
+      const from = new Date(weekStart)
+      from.setHours(0, 0, 0, 0)
+      const to = addDays(weekStart, 6)
+      to.setHours(23, 59, 59, 999)
       const res = await fetch(
-        `/api/reservations?from=${monday.toISOString()}&to=${friday.toISOString()}`,
+        `/api/reservations?from=${from.toISOString()}&to=${to.toISOString()}`,
       )
       if (!res.ok) throw new Error('Failed to load reservations')
       const payload = (await res.json()) as CalendarPayload
@@ -263,7 +273,7 @@ export function CalendarClient() {
     } finally {
       setLoading(false)
     }
-  }, [today])
+  }, [weekStart])
 
   useEffect(() => {
     fetchData()
@@ -298,6 +308,23 @@ export function CalendarClient() {
       </header>
 
       <main className="mx-auto max-w-[42rem] px-gutter pb-32 pt-20">
+        <div className="mb-md flex items-center justify-between">
+          <button
+            onClick={() => goToWeek(-1)}
+            aria-label="Previous week"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container text-on-surface-variant"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="text-label-lg text-on-surface">{fmtWeekRange(weekStart)}</span>
+          <button
+            onClick={() => goToWeek(1)}
+            aria-label="Next week"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container text-on-surface-variant"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
         <DayStrip weekDays={weekDays} selectedDay={selectedDay} onSelect={setSelectedDay} />
 
         <h2 className="mb-md mt-lg text-headline-lg-mobile text-on-surface">Upcoming Bookings</h2>

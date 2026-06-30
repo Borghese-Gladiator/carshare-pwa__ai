@@ -26,7 +26,7 @@ export interface DashboardPayload {
     userName: string
     loggedAt: string
     location: string | null
+    note: string | null
   }[]
   urgentNote: CarNote | null
-  pendingIncomingCount: number
 }
