@@ -15,6 +15,8 @@ interface ReturnModalProps {
   onClose: () => void
 }
 
+const DEFAULT_PARKING_LOCATION = 'Home'
+
 export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
   const [parkingLocation, setParkingLocation] = useState('')
   const [fuel, setFuel] = useState('')
@@ -54,6 +56,13 @@ export function ReturnModal({ onConfirm, onClose }: ReturnModalProps) {
             className={inputClass}
           />
         </label>
+        <button
+          type="button"
+          onClick={() => setParkingLocation(DEFAULT_PARKING_LOCATION)}
+          className="mt-xs rounded-full border border-outline px-md py-xs text-label-sm text-on-surface-variant"
+        >
+          Home
+        </button>
 
         <label className="mt-md block text-label-md text-on-surface-variant">
           Fuel level (optional)
