@@ -73,6 +73,10 @@ export async function verifySession(token: string): Promise<SessionPayload | nul
   }
 }
 
+export function isAccessCodeConfigured(): boolean {
+  return Boolean(process.env.ACCESS_CODE)
+}
+
 export function verifyAccessCode(candidate: string): boolean {
   const expected = process.env.ACCESS_CODE
   if (!expected || !candidate) return false

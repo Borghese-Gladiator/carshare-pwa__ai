@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 ENV_FILE=".env.local"
 MODE="${1:-}"
 
-LOCAL_DB_URL="postgres://carshare:carshare@localhost:5432/carshare"
+LOCAL_DB_URL="postgres://carshare:carshare@localhost:5433/carshare"
 
 usage() {
   cat <<'EOF'

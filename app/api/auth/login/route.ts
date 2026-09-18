@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAccessCode, signSession, COOKIE_NAME, COOKIE_MAX_AGE } from '@/lib/auth'
+import {
+  verifyAccessCode,
+  isAccessCodeConfigured,
+  signSession,
+  COOKIE_NAME,
+  COOKIE_MAX_AGE,
+} from '@/lib/auth'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const body = await req.json().catch(() => ({}))
   const candidate: string = typeof body?.code === 'string' ? body.code : ''
+
+  if (!isAccessCodeConfigured()) {
+    return NextResponse.json(
+      { error: 'Server misconfigured: ACCESS_CODE is not set' },
+      { status: 500 }
+    )
+  }
 
   if (!verifyAccessCode(candidate)) {
     return NextResponse.json({ error: 'Invalid access code' }, { status: 401 })

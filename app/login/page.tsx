@@ -24,7 +24,8 @@ export default function LoginPage() {
         router.refresh()
         return
       }
-      setError('Invalid access code')
+      const body = await res.json().catch(() => ({}))
+      setError(typeof body?.error === 'string' ? body.error : 'Invalid access code')
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
