@@ -5,14 +5,14 @@ import { Calendar, Car, MapPin } from 'lucide-react'
 import { StatusHero } from './StatusHero'
 import { ReturnModal, type ReturnData } from './ReturnModal'
 import { UserSwitcher } from './UserSwitcher'
+import { formatRelativeDay } from '@/lib/relativeDay'
 import type { DashboardPayload } from './types'
 
-const fmtDateTime = (iso: string) =>
-  new Intl.DateTimeFormat(undefined, {
-    weekday: 'short',
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(new Date(iso))
+const fmtDateTime = (iso: string) => {
+  const d = new Date(iso)
+  const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(d)
+  return `${formatRelativeDay(d)} ${time}`
+}
 
 function LoadingSkeleton() {
   return (
@@ -27,17 +27,28 @@ function LoadingSkeleton() {
   )
 }
 
-function UpcomingCard({ reservation }: { reservation: DashboardPayload['nextReservation'] }) {
+function UpcomingListCard({
+  reservations,
+}: {
+  reservations: DashboardPayload['upcomingReservations']
+}) {
   return (
     <div className="rounded-2xl bg-surface-container-low p-md">
       <div className="flex items-center gap-2 text-label-md text-on-surface-variant">
         <Calendar size={16} /> UPCOMING
       </div>
-      <p className="mt-sm text-body-md text-on-surface">
-        {reservation
-          ? `${reservation.userName} · ${fmtDateTime(reservation.startTime)}`
-          : 'No upcoming reservations'}
-      </p>
+      {reservations.length === 0 ? (
+        <p className="mt-sm text-body-md text-on-surface">No upcoming reservations</p>
+      ) : (
+        <ul className="mt-sm space-y-2">
+          {reservations.map((r, i) => (
+            <li key={`${r.userId}-${r.startTime}-${i}`} className="text-body-md text-on-surface">
+              {r.title ? `${r.title} · ` : ''}
+              {r.userName} · {fmtDateTime(r.startTime)}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
@@ -48,34 +59,7 @@ function LocationCard({ location }: { location: string | null }) {
       <div className="flex items-center gap-2 text-label-md text-on-surface-variant">
         <MapPin size={16} /> LOCATION
       </div>
-      <p className="mt-sm text-body-md text-on-surface">{location ?? 'Unknown'}</p>
-    </div>
-  )
-}
-
-function SharedWithCard({
-  members,
-  currentUserId,
-}: {
-  members: DashboardPayload['groupMembers']
-  currentUserId: string | null
-}) {
-  return (
-    <div className="rounded-2xl bg-surface-container-low p-md">
-      <div className="text-label-md text-on-surface-variant">SHARED WITH</div>
-      <div className="mt-sm flex flex-wrap gap-2">
-        {members.map((m) => (
-          <span
-            key={m.id}
-            title={m.name}
-            className={`flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed text-label-md text-on-primary-fixed ${
-              currentUserId === m.id ? 'ring-2 ring-primary' : ''
-            }`}
-          >
-            {m.name.charAt(0).toUpperCase()}
-          </span>
-        ))}
-      </div>
+      <p className="mt-sm text-body-md text-on-surface">{location ?? 'Home'}</p>
     </div>
   )
 }
@@ -211,11 +195,8 @@ export function DashboardClient() {
               submitting={submitting}
               onReturn={() => setShowReturn(true)}
             />
-            <div className="grid grid-cols-2 gap-md">
-              <UpcomingCard reservation={data.nextReservation} />
-              <LocationCard location={data.lastLocation} />
-            </div>
-            <SharedWithCard members={data.groupMembers} currentUserId={currentUserId} />
+            <UpcomingListCard reservations={data.upcomingReservations} />
+            <LocationCard location={data.lastLocation} />
             <RecentActivitySection items={data.recentActivity} />
           </>
         )}

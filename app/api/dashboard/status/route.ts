@@ -3,15 +3,16 @@ import { sql } from '@/lib/db/client'
 import {
   getLatestHandoffWithUser,
   getUpcomingReservationWithUser,
+  getUpcomingReservationsWithUser,
   getLastReturnLocation,
   getUnresolvedUrgentNotes,
   getRecentHandoffsWithUsers,
 } from '@/lib/db/queries'
-import { USERS } from '@/lib/users'
 import type { Car } from '@/lib/db/schema'
 
 const SOON_HOURS = 2
 const ACTIVITY_DAYS = 7
+const UPCOMING_LIMIT = 10
 
 export async function GET(): Promise<NextResponse> {
   const carRows = (await sql`SELECT * FROM cars LIMIT 1`) as unknown as Car[]
@@ -23,12 +24,14 @@ export async function GET(): Promise<NextResponse> {
   const [
     latestHandoff,
     upcomingReservation,
+    upcomingReservations,
     lastLocation,
     urgentNotes,
     recentHandoffs,
   ] = await Promise.all([
     getLatestHandoffWithUser(car.id),
     getUpcomingReservationWithUser(car.id, SOON_HOURS),
+    getUpcomingReservationsWithUser(car.id, UPCOMING_LIMIT),
     getLastReturnLocation(car.id),
     getUnresolvedUrgentNotes(car.id),
     getRecentHandoffsWithUsers(car.id, ACTIVITY_DAYS),
@@ -67,8 +70,14 @@ export async function GET(): Promise<NextResponse> {
           title: upcomingReservation.title,
         }
       : null,
+    upcomingReservations: upcomingReservations.map((r) => ({
+      userId: r.user_id,
+      userName: r.user_name,
+      startTime: r.start_time,
+      endTime: r.end_time,
+      title: r.title,
+    })),
     lastLocation,
-    groupMembers: USERS,
     recentActivity: recentHandoffs.map((h) => ({
       id: h.id,
       type: h.type,

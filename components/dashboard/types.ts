@@ -1,4 +1,4 @@
-import type { CarNote, User } from '@/lib/db/schema'
+import type { CarNote } from '@/lib/db/schema'
 
 export interface DashboardPayload {
   car: { id: string; name: string; details: string | null }
@@ -17,8 +17,14 @@ export interface DashboardPayload {
     endTime: string
     title: string | null
   } | null
+  upcomingReservations: {
+    userId: string
+    userName: string
+    startTime: string
+    endTime: string
+    title: string | null
+  }[]
   lastLocation: string | null
-  groupMembers: User[]
   recentActivity: {
     id: string
     type: 'pickup' | 'return'

@@ -14,14 +14,6 @@ function getWeekMonday(today: Date): Date {
   return d
 }
 
-function getWeekDays(monday: Date): Date[] {
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday)
-    d.setDate(monday.getDate() + i)
-    return d
-  })
-}
-
 function addDays(d: Date, days: number): Date {
   const x = new Date(d)
   x.setDate(x.getDate() + days)
@@ -38,14 +30,6 @@ function isSameDay(a: Date, b: Date): boolean {
   return a.toDateString() === b.toDateString()
 }
 
-function startOfDay(d: Date): Date {
-  const x = new Date(d)
-  x.setHours(0, 0, 0, 0)
-  return x
-}
-
-const DAY_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
-
 function fmtAgendaTime(start: string, end: string, today: Date): string {
   const s = new Date(start)
   const e = new Date(end)
@@ -58,38 +42,6 @@ function fmtAgendaTime(start: string, end: string, today: Date): string {
       : s.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
   const fmt = (d: Date) => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
   return `${dayLabel}, ${fmt(s)} – ${fmt(e)}`
-}
-
-function DayStrip({
-  weekDays,
-  selectedDay,
-  onSelect,
-}: {
-  weekDays: Date[]
-  selectedDay: Date
-  onSelect: (d: Date) => void
-}) {
-  return (
-    <div className="flex gap-2 overflow-x-auto pb-1">
-      {weekDays.map((d, i) => {
-        const selected = isSameDay(d, selectedDay)
-        return (
-          <button
-            key={d.toISOString()}
-            onClick={() => onSelect(d)}
-            className={`flex h-20 min-w-[56px] flex-1 flex-col items-center justify-center rounded-2xl ${
-              selected
-                ? 'bg-primary text-on-primary'
-                : 'bg-surface-container text-on-surface-variant'
-            }`}
-          >
-            <span className="text-label-md">{DAY_LABELS[i]}</span>
-            <span className="text-headline-lg-mobile">{d.getDate()}</span>
-          </button>
-        )
-      })}
-    </div>
-  )
 }
 
 function StatusPill({
@@ -121,38 +73,17 @@ function StatusPill({
 
 function AgendaTimeline({
   reservations,
-  selectedDay,
   today,
   currentUserId,
   onEdit,
 }: {
   reservations: CalendarReservation[]
-  selectedDay: Date
   today: Date
   currentUserId: string | null
   onEdit: (r: CalendarReservation) => void
 }) {
-  const dayStart = startOfDay(selectedDay).getTime()
-  const nextDay = startOfDay(selectedDay)
-  nextDay.setDate(nextDay.getDate() + 1)
-  const dayEnd = nextDay.getTime()
-  const items = reservations
-    .filter((r) => {
-      const t = new Date(r.start_time).getTime()
-      return t >= dayStart && t < dayEnd
-    })
-    .sort((a, b) => a.start_time.localeCompare(b.start_time))
-  const hasLaterThisWeek = reservations.some(
-    (r) => new Date(r.start_time).getTime() >= dayEnd,
-  )
-  const emptyMessage =
-    items.length === 0
-      ? hasLaterThisWeek
-        ? 'No reservations for this day'
-        : 'No more reservations for this week'
-      : hasLaterThisWeek
-        ? null
-        : 'No more reservations for this week'
+  const items = [...reservations].sort((a, b) => a.start_time.localeCompare(b.start_time))
+  const emptyMessage = items.length === 0 ? 'No reservations this week' : null
 
   return (
     <div className="relative pl-6">
@@ -231,11 +162,6 @@ function LoadingSkeleton() {
 export function CalendarClient() {
   const today = useMemo(() => new Date(), [])
   const [weekStart, setWeekStart] = useState<Date>(() => getWeekMonday(today))
-  const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart])
-  const [selectedDay, setSelectedDay] = useState<Date>(() => {
-    const dow = today.getDay()
-    return dow === 0 || dow === 6 ? getWeekMonday(today) : new Date(today)
-  })
   const [data, setData] = useState<CalendarPayload | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -248,10 +174,7 @@ export function CalendarClient() {
   }, [])
 
   const goToWeek = (delta: number) => {
-    const nextStart = addDays(weekStart, delta * 7)
-    setWeekStart(nextStart)
-    const isCurrentWeek = isSameDay(nextStart, getWeekMonday(today))
-    setSelectedDay(isCurrentWeek ? new Date(today) : nextStart)
+    setWeekStart(addDays(weekStart, delta * 7))
   }
 
   const fetchData = useCallback(async () => {
@@ -325,8 +248,6 @@ export function CalendarClient() {
             <ChevronRight size={20} />
           </button>
         </div>
-        <DayStrip weekDays={weekDays} selectedDay={selectedDay} onSelect={setSelectedDay} />
-
         <h2 className="mb-md mt-lg text-headline-lg-mobile text-on-surface">Upcoming Bookings</h2>
 
         {loading && <LoadingSkeleton />}
@@ -338,7 +259,6 @@ export function CalendarClient() {
         {!loading && data && (
           <AgendaTimeline
             reservations={data.reservations}
-            selectedDay={selectedDay}
             today={today}
             currentUserId={currentUserId}
             onEdit={openEdit}

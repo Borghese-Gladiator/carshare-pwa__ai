@@ -61,6 +61,20 @@ export async function getUpcomingReservationWithUser(
   return rows[0] ?? null;
 }
 
+export async function getUpcomingReservationsWithUser(
+  carId: string,
+  limit: number,
+): Promise<(Reservation & { user_name: string })[]> {
+  return sql`
+    SELECT r.*, u.name AS user_name
+    FROM reservations r JOIN users u ON r.user_id = u.id
+    WHERE r.car_id = ${carId}
+      AND r.status IN ('pending', 'active')
+      AND r.end_time > now()
+    ORDER BY r.start_time LIMIT ${limit}
+  ` as unknown as (Reservation & { user_name: string })[];
+}
+
 export async function getLastReturnLocation(carId: string): Promise<string | null> {
   const rows = (await sql`
     SELECT parking_location FROM handoff_logs

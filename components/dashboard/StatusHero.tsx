@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Car, Clock, CalendarCheck, AlertTriangle } from 'lucide-react'
 import type { DashboardPayload } from './types'
 
@@ -31,6 +32,33 @@ function ReturnButton({ submitting, onReturn }: { submitting: boolean; onReturn:
   )
 }
 
+function BookButton() {
+  return (
+    <Link
+      href="/calendar"
+      className="flex h-14 w-full items-center justify-center rounded-lg bg-primary text-label-lg text-on-primary"
+    >
+      Book a Trip
+    </Link>
+  )
+}
+
+function ActionButton({
+  hasCarOut,
+  submitting,
+  onReturn,
+}: {
+  hasCarOut: boolean
+  submitting: boolean
+  onReturn: () => void
+}) {
+  return hasCarOut ? (
+    <ReturnButton submitting={submitting} onReturn={onReturn} />
+  ) : (
+    <BookButton />
+  )
+}
+
 export function StatusHero({
   status,
   activeHandoff,
@@ -49,7 +77,7 @@ export function StatusHero({
           {urgentNote?.body ?? 'The car needs attention.'}
         </p>
         <div className="mt-lg">
-          <ReturnButton submitting={submitting} onReturn={onReturn} />
+          <ActionButton hasCarOut={activeHandoff != null} submitting={submitting} onReturn={onReturn} />
         </div>
       </section>
     )
@@ -76,7 +104,7 @@ export function StatusHero({
           )}
         </div>
         <div className="mt-lg">
-          <ReturnButton submitting={submitting} onReturn={onReturn} />
+          <ActionButton hasCarOut={activeHandoff != null} submitting={submitting} onReturn={onReturn} />
         </div>
       </section>
     )
@@ -95,7 +123,7 @@ export function StatusHero({
           Starting {fmtDateTime(nextReservation.startTime)}
         </p>
         <div className="mt-lg">
-          <ReturnButton submitting={submitting} onReturn={onReturn} />
+          <ActionButton hasCarOut={activeHandoff != null} submitting={submitting} onReturn={onReturn} />
         </div>
       </section>
     )
@@ -110,7 +138,7 @@ export function StatusHero({
       <Car size={72} className="my-lg text-on-secondary-fixed" />
       <h2 className="text-headline-lg-mobile text-on-secondary-fixed">Car is Available</h2>
       <div className="mt-lg w-full">
-        <ReturnButton submitting={submitting} onReturn={onReturn} />
+        <ActionButton hasCarOut={activeHandoff != null} submitting={submitting} onReturn={onReturn} />
       </div>
     </section>
   )
