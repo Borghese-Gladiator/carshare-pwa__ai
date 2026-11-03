@@ -1,3 +1,27 @@
 # TODO
 
-Nothing open.
+Work to move the app to the scope in `docs/PRD.md`.
+
+## Decisions
+- Decide if existing events are movable by default, or fixed until the planner marks them flexible.
+- Decide if the PWA (manifest, offline shell) stays in scope.
+
+## PoC
+- Model the intentions (goals) separately from the scheduled events.
+- Model three people, one shared car, fixed events and flexible events.
+- Add travel-time constraints.
+- Build the constraint-based scheduling engine. It returns 2–3 ranked options, each with an explanation.
+- Add the Regenerate action.
+- Add tests for repeated replanning. The engine must not add conflicts or move unrelated events.
+
+## MVP
+- Persistent weekly calendar.
+- Editors for events and availability.
+- Both shared cars and their locations.
+- Visit scheduling with transportation options.
+- Side-by-side comparison of plans.
+- Accept or reject a proposal.
+
+## Remove (out of scope)
+- Multi-user auth and the two fixed users (`lib/auth.ts`, `lib/users.ts`, `middleware.ts`).
+- The old reservation flow, if the new calendar replaces it.

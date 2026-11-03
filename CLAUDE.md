@@ -1,6 +1,10 @@
 # CarShare PWA
 
-Next.js (App Router) PWA for two people who share one car. Neon Postgres, Tailwind, Vercel.
+Next.js (App Router) PWA. Neon Postgres, Tailwind, Vercel.
+
+The current code is a reservation app for two people who share one car. The product direction
+changed: `docs/PRD.md` now defines a single-user scheduling optimizer. `docs/TODO.md` tracks
+the move to the new scope.
 
 ## Layout
 
