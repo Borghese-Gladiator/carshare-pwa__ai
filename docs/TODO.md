@@ -1,11 +1,5 @@
 # TODO
 
-## Tests for high-risk logic
-
-Only `lib/relativeDay.ts` has tests. Add `node:test` tests for:
-- `lib/auth.ts`: sign and verify a session, reject a changed or expired token, check the access code.
-- Reservation conflict detection in `lib/db/queries.ts` (needs the local DB, or extract the overlap rule).
-
 ## Cross-platform dev start
 
 The dev setup works only on macOS and Linux. `scripts/dev-db.sh` is a Bash

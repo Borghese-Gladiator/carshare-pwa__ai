@@ -20,7 +20,9 @@ docs/              DESIGN.md (design tokens), PRD.md, TODO.md
 
 - `./scripts/dev-db.sh local` — start Docker Postgres, migrate, seed. Then `npm run dev`.
 - `npm run check` — typecheck and unit tests. Run before every commit.
-- `npm test` — unit tests only (`node:test`, files are `lib/**/*.test.ts`).
+- `npm test` — unit tests (`node:test`, files are `lib/**/*.test.ts`). DB tests skip.
+- `npm run test:db` — all tests, including DB tests against the local Docker DB. Run it after
+  a change to `lib/db/`. The DB tests use reservations in the year 2099 and delete them after.
 - `npm run db:migrate` — apply new migrations.
 
 ## Conventions
