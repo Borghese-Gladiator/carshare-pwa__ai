@@ -13,20 +13,21 @@ without the back-and-forth texting.
 - Shared access-code auth → `HttpOnly`, `Secure`, `SameSite=Lax` signed session cookie (~30d)
 - PWA: web manifest + service worker, offline app shell, graceful offline fallback
 
-## Design
+## Layout
 
-The design system and reference screens live in [`design/`](./design):
-
-- `design/serene_mobility/DESIGN.md` — "Calm & Capable" design system (colors, type, spacing, components)
-- `design/<screen>/screen.png` + `code.html` — reference mockups for Dashboard (available / in-use),
-  Calendar/Reservations agenda, and Notes & Issues
-- `design/shared_car_app_prd.txt` — condensed PRD
+```
+app/          Next.js routes and API handlers
+components/   UI, grouped by screen
+lib/          auth, utils, and db/ (client, queries, migrations/)
+scripts/      dev-db setup, migrate, seed
+public/       PWA manifest, service worker, icons
+docs/         DESIGN.md (design system), PRD.md, TODO.md
+```
 
 ## Data model
 
 ```
 users · cars · reservations · car_notes · handoff_logs
-car_requests   (conflict / borrow-now requests)
 ```
 
 ## Database Setup
@@ -63,8 +64,12 @@ npm run dev
 ```
 
 Migrations are tracked in a `_migrations` table; re-running skips already-applied files.
-The seed (one group, two users Alice + Bob, one car) is idempotent.
+The seed (one group, two users, one car) is idempotent.
 
-## Status
+## Tests
 
-Built incrementally via Agent Workbench. See the project task queue.
+```bash
+npm test
+```
+
+See [`docs/TODO.md`](./docs/TODO.md) for open work.

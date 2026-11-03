@@ -24,7 +24,7 @@ async function main(): Promise<void> {
     );
     const applied = new Set(rows.map((r) => r.filename));
 
-    const dir = path.join(process.cwd(), 'db', 'migrations');
+    const dir = path.join(process.cwd(), 'lib', 'db', 'migrations');
     const files = fs
       .readdirSync(dir)
       .filter((f) => f.endsWith('.sql'))
