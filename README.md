@@ -32,7 +32,7 @@ users · cars · reservations · car_notes · handoff_logs
 
 ## Development
 
-Works on Windows, macOS, and Linux. Requires Node and Docker.
+Works on Windows, macOS, and Linux. Requires Node 22+ and Docker.
 
 ```bash
 npm install
