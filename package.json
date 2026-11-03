@@ -6,10 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "test": "node --import tsx --test lib/**/*.test.ts",
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
-    "db:seed": "tsx --env-file=.env.local scripts/seed.ts"
+    "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "check": "tsc --noEmit && npm test"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
