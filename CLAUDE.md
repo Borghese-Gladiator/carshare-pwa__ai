@@ -12,13 +12,15 @@ lib/db/            client.ts, schema.ts (types), queries.ts (all SQL), migration
 lib/auth.ts        signed session cookie + access code check
 lib/users.ts       the two fixed users and the car (hard-coded IDs)
 middleware.ts      auth gate; add public paths to PUBLIC
-scripts/           dev-db.sh, migrate.ts, seed.ts
+scripts/           dev.ts (npm run up/down), migrate.ts, seed.ts
 docs/              DESIGN.md (design tokens), PRD.md, TODO.md
 ```
 
 ## Commands
 
-- `./scripts/dev-db.sh local` — start Docker Postgres, migrate, seed. Then `npm run dev`.
+- `npm run up` — start Docker Postgres, migrate, seed, then `next dev`. `npm run down` stops it.
+  `npm run up:neon` does the same against Neon cloud. Scripts must work on Windows too:
+  write them in Node, not Bash.
 - `npm run check` — typecheck and unit tests. Run before every commit.
 - `npm test` — unit tests (`node:test`, files are `lib/**/*.test.ts`). DB tests skip.
 - `npm run test:db` — all tests, including DB tests against the local Docker DB. Run it after
@@ -39,6 +41,6 @@ docs/              DESIGN.md (design tokens), PRD.md, TODO.md
 
 - The service worker (`public/sw.js`) registers only in production. If the browser shows old code
   in dev, unregister the service worker and clear caches, then reload twice.
-- `.env.local` needs `DATABASE_URL`, `ACCESS_CODE`, `SESSION_SECRET`. `dev-db.sh` fills them.
+- `.env.local` needs `DATABASE_URL`, `ACCESS_CODE`, `SESSION_SECRET`. `npm run up` fills them.
   `NEON_LOCAL=1` routes the Neon driver to the local Docker proxy.
 - There are no browser tests. To verify UI changes, run the app and check the page by hand.

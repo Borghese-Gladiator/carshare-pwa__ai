@@ -19,7 +19,7 @@ without the back-and-forth texting.
 app/          Next.js routes and API handlers
 components/   UI, grouped by screen
 lib/          auth, utils, and db/ (client, queries, migrations/)
-scripts/      dev-db setup, migrate, seed
+scripts/      dev.ts (up/down), migrate, seed
 public/       PWA manifest, service worker, icons
 docs/         DESIGN.md (design system), PRD.md, TODO.md
 ```
@@ -30,37 +30,25 @@ docs/         DESIGN.md (design system), PRD.md, TODO.md
 users · cars · reservations · car_notes · handoff_logs
 ```
 
-## Database Setup
+## Development
 
-One script — `scripts/dev-db.sh` — sets up either backend and runs migrate + seed.
-It also fills in `ACCESS_CODE` / `SESSION_SECRET` in `.env.local` if they are blank.
+Works on Windows, macOS, and Linux. Requires Node and Docker.
 
 ```bash
 npm install
+npm run up     # start local DB, migrate, seed, then the dev server
+npm run down   # stop the local DB and delete its volume
 ```
 
-### Offline (Dockerized Postgres + Neon proxy)
+`npm run up` fills in `ACCESS_CODE` / `SESSION_SECRET` in `.env.local` if they are blank,
+and points `DATABASE_URL` at the local DB. It runs local Postgres plus
+`local-neon-http-proxy` (see `docker-compose.db.yml`), and sets `NEON_LOCAL=1` so the
+`@neondatabase/serverless` driver goes through the proxy (`lib/db/neon-local.ts`).
 
-No cloud account needed. Requires Docker running.
+To use Neon cloud instead, put your Neon string in `.env.local`, then run `npm run up:neon`:
 
-```bash
-./scripts/dev-db.sh local        # start DB, migrate, seed
-npm run dev
-./scripts/dev-db.sh local --down # stop DB and drop its volume
 ```
-
-This runs local Postgres plus `local-neon-http-proxy` (see `docker-compose.db.yml`)
-so the `@neondatabase/serverless` driver works against localhost. The script sets
-`NEON_LOCAL=1` and a local `DATABASE_URL` in `.env.local`; that flag routes the
-driver to the proxy (`lib/db/neon-local.ts`).
-
-### Neon cloud
-
-```bash
-# Put your Neon string in .env.local first:
-#   DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/db?sslmode=require
-./scripts/dev-db.sh neon
-npm run dev
+DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/db?sslmode=require
 ```
 
 Migrations are tracked in a `_migrations` table; re-running skips already-applied files.
@@ -69,7 +57,8 @@ The seed (one group, two users, one car) is idempotent.
 ## Tests
 
 ```bash
-npm test
+npm run check     # typecheck + unit tests
+npm run test:db   # also runs DB tests; needs npm run up first
 ```
 
 See [`docs/TODO.md`](./docs/TODO.md) for open work.

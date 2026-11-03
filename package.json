@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --import tsx --test 'lib/**/*.test.ts'",
+    "test": "node --import tsx --test \"lib/**/*.test.ts\"",
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
     "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
     "check": "tsc --noEmit && npm test",
-    "test:db": "node --env-file=.env.local --import tsx --test 'lib/**/*.test.ts'"
+    "test:db": "node --env-file=.env.local --import tsx --test \"lib/**/*.test.ts\"",
+    "up": "tsx scripts/dev.ts up",
+    "up:neon": "tsx scripts/dev.ts up:neon",
+    "down": "tsx scripts/dev.ts down"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
