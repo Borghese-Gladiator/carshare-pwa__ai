@@ -2,10 +2,6 @@
 
 Work to move the app to the scope in `docs/PRD.md`.
 
-## Decisions
-- Decide if existing events are movable by default, or fixed until the planner marks them flexible.
-- Decide if the PWA (manifest, offline shell) stays in scope.
-
 ## PoC
 - Model the intentions (goals) separately from the scheduled events.
 - Model three people, one shared car, fixed events and flexible events.

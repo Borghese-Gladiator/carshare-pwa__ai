@@ -61,5 +61,6 @@ These items are removed from the previous MVP. Add them later only if necessary.
 - **UI patterns:** Rounded cards, clear status badges, bottom tab bar (mobile), soft shadows.
 - **Tone:** Casual and clear.
 
-## 8. Open Questions
-- Are existing events movable by default, or fixed until the planner marks them flexible?
+## 8. Resolved Questions
+- Existing events are movable by default. The planner marks an event fixed to lock it.
+- The PWA (manifest, offline shell) stays in scope.
