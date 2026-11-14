@@ -11,7 +11,7 @@ Work to move the app to the scope in `docs/PRD.md`.
 - Transport modes: car A, car B, commuter rail, or a drop-off by another person.
 - Ranking uses fixed weights in code: fewer moved events, then smaller shifts, then less
   travel time, then fewer hours outside 8:00–22:00, then car before drop-off.
-- Keep the old tables. Remove only the old code, so no data is lost on Neon.
+- Drop the old tables and remove the old code. There are no users yet, so no data must be kept.
 
 ## Engine (lib/planner)
 - Eastern time for day hours and for the explanations.
