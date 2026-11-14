@@ -2,20 +2,27 @@
 
 Work to move the app to the scope in `docs/PRD.md`.
 
-## PoC
-- Model the intentions (goals) separately from the scheduled events.
-- Model three people, one shared car, fixed events and flexible events.
-- Add travel-time constraints.
-- Add the Regenerate button to the UI. The engine function is `regenerate` in `lib/planner/generate.ts`.
+## Decisions
+- Existing events are movable by default. The planner marks an event fixed to lock it.
+- The PWA (manifest, offline shell) stays in scope.
+- The planner types travel times by hand, for each pair of places and each mode.
+- Events can repeat each week, for example a work shift Mon–Fri.
+- All times are Eastern time (`America/New_York`).
+- Transport modes: car A, car B, commuter rail, or a drop-off by another person.
+- Ranking uses fixed weights in code: fewer moved events, then smaller shifts, then less
+  travel time, then fewer hours outside 8:00–22:00, then car before drop-off.
+- Keep the old tables. Remove only the old code, so no data is lost on Neon.
+
+## Engine (lib/planner)
+- Eastern time for day hours and for the explanations.
+- Travel modes: car, commuter rail, drop-off.
+- Weekly recurring events.
+- Fixed ranking weights.
 
 ## MVP
-- Persistent weekly calendar.
-- Editors for events and availability.
-- Both shared cars and their locations.
-- Visit scheduling with transportation options.
-- Side-by-side comparison of plans.
-- Accept or reject a proposal.
-
-## Remove (out of scope)
-- Multi-user auth and the two fixed users (`lib/auth.ts`, `lib/users.ts`, `middleware.ts`).
-- The old reservation flow, if the new calendar replaces it.
+- Store people, places, cars, travel times, events and intentions in Postgres.
+- Remove the two fixed users and the old reservation flow. Keep the access-code gate.
+- Weekly calendar.
+- Editors for events, intentions, people, places, cars and travel times.
+- Regenerate, side-by-side comparison of plans, accept or reject.
+- PWA checks: manifest, service worker, offline shell.
