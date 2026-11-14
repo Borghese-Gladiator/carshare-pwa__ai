@@ -97,6 +97,7 @@ export function generatePlans(plan: Plan): GenerateResult {
         title: it.description,
         personIds: it.personIds,
         locationId: it.locationId ?? "",
+        carId: it.carId,
         start: iso(s),
         end: iso(s + len),
       };
@@ -157,4 +158,33 @@ export function generatePlans(plan: Plan): GenerateResult {
   });
 
   return { options };
+}
+
+export function regenerate(plan: Plan, previous?: PlanOption): GenerateResult {
+  if (!previous) return generatePlans(plan);
+  const prev = new Map(previous.events.map((e) => [e.id, e]));
+  const events = plan.events.map((e) => {
+    const p = prev.get(e.id);
+    return p && isMovable(e) ? { ...e, start: p.start, end: p.end } : e;
+  });
+  const changed = events.filter((e) => {
+    const p = prev.get(e.id);
+    return !p || ms(p.start) !== ms(e.start) || ms(p.end) !== ms(e.end);
+  });
+  const shares = (e: PlanEvent, others: { personIds: string[]; carId?: string }[]) =>
+    others.some((c) => c.personIds.some((id) => e.personIds.includes(id)) || (c.carId !== undefined && c.carId === e.carId));
+  const tiers = [
+    (e: PlanEvent) => !shares(e, changed),
+    (e: PlanEvent) => !shares(e, [...changed, ...plan.intentions]),
+    () => false,
+  ];
+  let result: GenerateResult = { options: [] };
+  for (const keep of tiers) {
+    const pinned = new Map(events.filter((e) => isMovable(e) && keep(e)).map((e) => [e.id, e]));
+    result = generatePlans({ ...plan, events: events.map((e) => (pinned.has(e.id) ? { ...e, fixed: true } : e)) });
+    if (result.options.length > 0) {
+      return { options: result.options.map((o) => ({ ...o, events: o.events.map((e) => pinned.get(e.id) ?? e) })) };
+    }
+  }
+  return result;
 }
