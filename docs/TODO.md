@@ -6,7 +6,6 @@ Work to move the app to the scope in `docs/PRD.md`.
 - Model the intentions (goals) separately from the scheduled events.
 - Model three people, one shared car, fixed events and flexible events.
 - Add travel-time constraints.
-- Build the constraint-based scheduling engine. It returns 2–3 ranked options, each with an explanation.
 - Add the Regenerate action.
 - Add tests for repeated replanning. The engine must not add conflicts or move unrelated events.
 
