@@ -6,8 +6,7 @@ Work to move the app to the scope in `docs/PRD.md`.
 - Model the intentions (goals) separately from the scheduled events.
 - Model three people, one shared car, fixed events and flexible events.
 - Add travel-time constraints.
-- Add the Regenerate action.
-- Add tests for repeated replanning. The engine must not add conflicts or move unrelated events.
+- Add the Regenerate button to the UI. The engine function is `regenerate` in `lib/planner/generate.ts`.
 
 ## MVP
 - Persistent weekly calendar.
