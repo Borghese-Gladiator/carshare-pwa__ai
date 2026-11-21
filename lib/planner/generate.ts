@@ -1,7 +1,7 @@
 import { findConflicts, type Conflict } from "./conflicts";
-import { isMovable, type Plan, type PlanEvent, type TravelTime } from "./model";
+import { isMovable, travelMinutes, type Plan, type PlanEvent, type TravelTime } from "./model";
 
-export type ScheduledBlock = { intentionId: string; start: string; end: string };
+export type ScheduledBlock = { intentionId: string; start: string; end: string; locationId?: string };
 
 export type PlanOption = {
   events: PlanEvent[];
@@ -51,6 +51,19 @@ function outsideDayMinutes(start: number, end: number): number {
   return out;
 }
 
+function blockTravel(events: PlanEvent[], travel: TravelTime[], b: ScheduledBlock): number {
+  const block = events.find((e) => e.id === `intention:${b.intentionId}`)!;
+  let total = 0;
+  for (const p of block.personIds) {
+    const mine = events.filter((e) => e !== block && e.personIds.includes(p));
+    const prev = mine.filter((e) => ms(e.end) <= ms(b.start)).sort((x, y) => ms(y.end) - ms(x.end))[0];
+    const next = mine.filter((e) => ms(e.start) >= ms(b.end)).sort((x, y) => ms(x.start) - ms(y.start))[0];
+    if (prev) total += travelMinutes(travel, prev.locationId, block.locationId) ?? 0;
+    if (next) total += travelMinutes(travel, block.locationId, next.locationId) ?? 0;
+  }
+  return total;
+}
+
 export function generatePlans(plan: Plan): GenerateResult {
   const travel = plan.travel;
   const fixed = plan.events.filter((e) => !isMovable(e));
@@ -91,19 +104,22 @@ export function generatePlans(plan: Plan): GenerateResult {
     }
     const it = plan.intentions[idx];
     const len = it.minMinutes * 60000;
-    for (let s = ms(it.windowStart); s + len <= ms(it.windowEnd); s += STEP) {
-      const block: PlanEvent = {
-        id: `intention:${it.id}`,
-        title: it.description,
-        personIds: it.personIds,
-        locationId: it.locationId ?? "",
-        carId: it.carId,
-        start: iso(s),
-        end: iso(s + len),
-      };
-      const next = [...placed, block];
-      if (!clean(next, travel)) continue;
-      placeIntentions(next, [...blocks, { intentionId: it.id, start: block.start, end: block.end }], idx + 1);
+    const places = it.locationIds?.length ? it.locationIds : [it.locationId ?? ""];
+    for (const locationId of places) {
+      for (let s = ms(it.windowStart); s + len <= ms(it.windowEnd); s += STEP) {
+        const block: PlanEvent = {
+          id: `intention:${it.id}`,
+          title: it.description,
+          personIds: it.personIds,
+          locationId,
+          carId: it.carId,
+          start: iso(s),
+          end: iso(s + len),
+        };
+        const next = [...placed, block];
+        if (!clean(next, travel)) continue;
+        placeIntentions(next, [...blocks, { intentionId: it.id, start: block.start, end: block.end, locationId }], idx + 1);
+      }
     }
   };
   placeIntentions(fixed, [], 0);
@@ -126,7 +142,8 @@ export function generatePlans(plan: Plan): GenerateResult {
         return sum + Math.abs(ms(now.start) - ms(m.start)) / 60000;
       }, 0);
       const offHours = blocks.reduce((sum, b) => sum + outsideDayMinutes(ms(b.start), ms(b.end)), 0);
-      const score = Math.round(100 - moved.length * 5 - shiftMinutes / 30 - offHours / 15);
+      const travelTotal = blocks.reduce((sum, b) => sum + blockTravel(events, travel, b), 0);
+      const score = Math.round(100 - moved.length * 5 - shiftMinutes / 30 - offHours / 15 - travelTotal / 10);
       return { events, blocks, moved, score };
     })
     .sort((a, b) => b.score - a.score);
@@ -147,7 +164,8 @@ export function generatePlans(plan: Plan): GenerateResult {
   const options = picked.map(({ events, blocks, moved, score }) => {
     const lines = blocks.map((b) => {
       const it = plan.intentions.find((i) => i.id === b.intentionId)!;
-      return `Scheduled "${it.description}" ${fmt(ms(b.start))}–${fmt(ms(b.end))}.`;
+      const place = it.locationIds?.length ? ` at ${plan.locations.find((l) => l.id === b.locationId)?.name ?? b.locationId}` : "";
+      return `Scheduled "${it.description}"${place} ${fmt(ms(b.start))}–${fmt(ms(b.end))}.`;
     });
     for (const m of moved) {
       const now = events.find((e) => e.id === m.id)!;
