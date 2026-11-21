@@ -1,4 +1,4 @@
-const CACHE = 'carshare-v1'
+const CACHE = 'carshare-v2'
 
 // Precached on install. /offline is PUBLIC (no auth) and fully static, so its
 // fetch always returns 200 — it is the guaranteed offline navigation fallback.
@@ -8,8 +8,7 @@ const CACHE = 'carshare-v1'
 const OFFLINE_URL = '/offline'
 const PRECACHE = [
   OFFLINE_URL,
-  '/dashboard',
-  '/calendar',
+  '/compare',
   '/settings',
 ]
 
