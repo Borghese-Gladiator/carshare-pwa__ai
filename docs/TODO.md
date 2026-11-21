@@ -18,6 +18,18 @@ Work to move the app to the scope in `docs/PRD.md`.
 - Travel modes: car, commuter rail, drop-off.
 - Weekly recurring events.
 - Fixed ranking weights.
+- Candidate places on an intention (`locationIds`). Done: the engine picks the place with the least travel.
+- No priority field. An event is fixed or movable.
+- Slack report for a "Tight" badge. Not started.
+
+## Views (desktop first, PWA, responsive)
+- Compare (home, `/compare`): 2-3 option columns, Regenerate, Accept, Reject.
+- Week (`/week`): lanes for each person and car, lock icon, travel gaps, red conflicts.
+- Intentions (`/intentions`): one card for each goal, Fits or Cannot fit, one-line reason.
+- What if: a sheet on Compare. Nothing saves until Accept.
+- Editors: sheets for event, intention and quick add.
+- Setup (`/setup`): people, places, cars, travel-time grid.
+- Nav: left sidebar at `md` and above, bottom nav below `md`.
 
 ## MVP
 - Store people, places, cars, travel times, events and intentions in Postgres.
