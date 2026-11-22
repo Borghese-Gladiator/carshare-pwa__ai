@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { GitCompareArrows, Settings } from 'lucide-react'
+import { CalendarDays, GitCompareArrows, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const tabs = [
   { href: '/compare', label: 'Compare', Icon: GitCompareArrows },
+  { href: '/week', label: 'Week', Icon: CalendarDays },
   { href: '/settings', label: 'Settings', Icon: Settings },
 ] as const
 

@@ -9,6 +9,7 @@ const OFFLINE_URL = '/offline'
 const PRECACHE = [
   OFFLINE_URL,
   '/compare',
+  '/week',
   '/settings',
 ]
 
