@@ -93,7 +93,7 @@ export default function SettingsPage() {
           <h2 className="mb-sm text-headline-lg-mobile text-on-surface">About</h2>
           <p className="text-body-sm text-on-surface-variant">CarShare · v0.1.0</p>
           <p className="mt-xs text-body-sm text-on-surface-variant">
-            Shared car coordination for two people.
+            A planner that checks if your plans still fit.
           </p>
         </div>
       </main>
