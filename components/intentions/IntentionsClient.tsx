@@ -75,6 +75,7 @@ export function IntentionsClient() {
             <label htmlFor="goal-name" className="text-body-sm text-on-surface-variant">Goal name</label>
             <input id="goal-name" className={field + ' mt-xs'} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
+          <p className="text-body-sm text-on-surface-variant">The window is the time range that the goal can use. Times are UTC.</p>
           <div className="grid gap-md md:grid-cols-3">
             <div>
               <label htmlFor="goal-hours" className="text-body-sm text-on-surface-variant">Length in hours</label>
