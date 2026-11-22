@@ -11,6 +11,7 @@ const PRECACHE = [
   '/compare',
   '/week',
   '/intentions',
+  '/setup',
   '/settings',
 ]
 
