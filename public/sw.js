@@ -10,6 +10,7 @@ const PRECACHE = [
   OFFLINE_URL,
   '/compare',
   '/week',
+  '/intentions',
   '/settings',
 ]
 
