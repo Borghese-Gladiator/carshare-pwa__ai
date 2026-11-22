@@ -25,6 +25,7 @@ export type Intention = {
   windowStart: string;
   windowEnd: string;
   locationId?: string;
+  locationIds?: string[];
   carId?: string;
 };
 

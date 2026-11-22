@@ -20,7 +20,7 @@ export default function LoginPage() {
         body: JSON.stringify({ code }),
       })
       if (res.ok) {
-        router.replace('/dashboard')
+        router.replace('/compare')
         router.refresh()
         return
       }

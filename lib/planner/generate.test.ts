@@ -66,3 +66,41 @@ test("overlapping fixed trips on one car give a reason", () => {
   assert.match(r.reason!, /t1/);
   assert.match(r.reason!, /t2/);
 });
+
+const places: Plan = {
+  people: [{ id: "me", name: "Me" }],
+  locations: [
+    { id: "home", name: "Home" },
+    { id: "cafe", name: "Cafe" },
+    { id: "lake", name: "Lake" },
+  ],
+  cars: [],
+  travel: [
+    { from: "home", to: "cafe", minutes: 10 },
+    { from: "home", to: "lake", minutes: 90 },
+  ],
+  events: [{ id: "class", title: "Class", personIds: ["me"], locationId: "home", start: "2026-11-14T10:00:00Z", end: "2026-11-14T12:00:00Z", fixed: true }],
+  intentions: [{ id: "walk", description: "Walk", personIds: ["me"], minMinutes: 60, windowStart: "2026-11-14T12:00:00Z", windowEnd: "2026-11-14T15:00:00Z", locationIds: ["lake", "cafe"] }],
+};
+
+test("candidate places: the option with less travel wins", () => {
+  const { options } = generatePlans(places);
+  assert.equal(options[0].blocks[0].locationId, "cafe");
+  assert.match(options[0].explanation, /at Cafe/);
+  for (const o of options) assert.deepEqual(findConflicts({ events: o.events, travel: o.travel }), []);
+});
+
+test("one candidate place gives the same blocks as a single locationId", () => {
+  const one = { ...places.intentions[0], locationIds: ["cafe"] };
+  const old = { ...places.intentions[0], locationIds: undefined, locationId: "cafe" };
+  const a = generatePlans({ ...places, intentions: [one] });
+  const b = generatePlans({ ...places, intentions: [old] });
+  assert.deepEqual(a.options.map((o) => [o.score, o.blocks[0].start]), b.options.map((o) => [o.score, o.blocks[0].start]));
+});
+
+test("no candidate place fits: result has a reason", () => {
+  const tight = { ...places.intentions[0], windowEnd: "2026-11-14T13:00:00Z", locationIds: ["lake"] };
+  const r = generatePlans({ ...places, intentions: [tight] });
+  assert.deepEqual(r.options, []);
+  assert.match(r.reason!, /Walk/);
+});
