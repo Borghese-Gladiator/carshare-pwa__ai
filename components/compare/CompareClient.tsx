@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { Check, RefreshCw, X } from 'lucide-react'
-import { generatePlans, regenerate, type GenerateResult, type PlanOption } from '@/lib/planner/generate'
-import { samplePlan } from '@/lib/planner/sample'
+import { usePlan } from '@/components/plan/PlanProvider'
+import { generatePlans, regenerate, type PlanOption } from '@/lib/planner/generate'
 import type { Plan } from '@/lib/planner/model'
 
 const fmt = (iso: string) =>
@@ -12,18 +11,10 @@ const fmt = (iso: string) =>
 const placeName = (plan: Plan, id?: string) => plan.locations.find((l) => l.id === id)?.name
 
 export function CompareClient() {
-  const [plan, setPlan] = useState<Plan>(samplePlan)
-  const [accepted, setAccepted] = useState<PlanOption | undefined>()
-  const [result, setResult] = useState<GenerateResult | undefined>()
+  const { plan, accepted, accept, result, setResult } = usePlan()
 
   function run() {
     setResult(accepted ? regenerate(plan, accepted) : generatePlans(plan))
-  }
-
-  function accept(option: PlanOption) {
-    setPlan({ ...plan, events: option.events.filter((e) => !e.id.startsWith('intention:')) })
-    setAccepted(option)
-    setResult(undefined)
   }
 
   function reject(option: PlanOption) {
