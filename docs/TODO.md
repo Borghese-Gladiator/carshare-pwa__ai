@@ -31,6 +31,17 @@ Work to move the app to the scope in `docs/PRD.md`.
 - Setup (`/setup`): people, places, cars, travel-time grid.
 - Nav: left sidebar at `md` and above, bottom nav below `md`.
 
+## Known gaps (found after the four views merged)
+- [ ] Storage: plan data lives in the browser (`localStorage`) only. Store it in Postgres so it syncs across devices.
+- [ ] Sharing: one person plans for everyone. Let other people sign in, see the plan, and edit their own events.
+- [ ] Travel times: the user types them by hand. Add a map lookup.
+- [ ] Travel modes: cars are the only vehicle. Add transit, walking and rideshare.
+- [ ] Weekly repeats: the user enters a work shift one day at a time. Add Mon–Fri repeats.
+- [ ] Time zone: the app uses UTC. Use the local time zone of the user.
+- [ ] Event editor: the user cannot edit an event after creation. Add the editor sheet.
+- [ ] What if sheet: the user cannot test an event without a save.
+- [ ] Old pages: remove `/dashboard`, `/calendar` and their API routes.
+
 ## MVP
 - Store people, places, cars, travel times, events and intentions in Postgres.
 - Remove the two fixed users and the old reservation flow. Keep the access-code gate.
